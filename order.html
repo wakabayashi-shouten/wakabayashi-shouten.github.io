@@ -84,7 +84,7 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <div id="kibouCBox" class="hide"><label>お届けの希望日</label><select id="kibouC"><option>指定なし（いちばん早い日の午前中）</option></select><p class="small" style="margin:2px 0">※ 北海道・九州・沖縄などの遠い地域は、<span class="kc2"></span>以降のお届けになります。</p></div>
 <label>お届けの時間帯</label><select id="jikan" ><option selected>指定なし</option><option>午前中</option><option>14〜16時</option><option>16〜18時</option><option>18〜20時</option><option>19〜21時</option></select>
 <label>送り主（差出人） <button type="button" id="dojo" style="width:auto;font-size:16px;padding:4px 14px;margin-left:8px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">お届け先と同じ</button></label>
-<p class="small" style="margin:2px 0">※ 自分あてに送る時は「お届け先と同じ」でお届け先を写せます（写した後も直せます）。違う方の時は、そのまま入れてください。<br><b>贈り物（お届け先がご注文の方と違う）の時は、送り主のご住所を必ず入れてください。</b></p>
+<p class="small" style="margin:2px 0 4px">※ 送り主の 〒・ご住所・お名前（漢字で）・電話を書いてください。ご自分宛ての時は「お届け先と同じ」を押すと入ります。</p>
 <input id="frZip" placeholder="郵便番号" inputmode="numeric" autocomplete="billing postal-code" style="margin-top:6px"><input id="frAddr" placeholder="ご住所" autocomplete="billing street-address" style="margin-top:6px"><input id="frName" placeholder="氏名" autocomplete="billing name"><input id="frTel" type="tel" placeholder="電話" autocomplete="billing tel" style="margin-top:6px">
 <p class="small">※ 2か所以上に送る時は、1か所ずつカートに入れてください。</p>
 </div>
@@ -259,7 +259,7 @@ var LB={email:'メールアドレス',kibou:'到着の希望日（日にちで�
 function check(o){var ng=[],v=function(i){return String(o[i]||'').trim()},need=function(i){if(!v(i))ng.push(i)};
 if(!o.how)ng.push('how');else if(o.how==='bin25'){if(!o.set)ng.push('set')}else{var n=0;C.items.forEach(function(it){if(it.how===(o.how==='hamb'?'hamb':'kojo'))n+=o[it.key]||0});if(!n)ng.push('hin')}
 need('name');need('tel');
-if(o.how&&o.how!=='kojo'){need('kana');need('toZip');need('toAddr');need('toName');need('toTel');if(gift(o)){need('frZip');need('frAddr')}}
+if(o.how&&o.how!=='kojo'){need('kana');need('toZip');need('toAddr');need('toName');need('toTel');need('frZip');need('frAddr');need('frName');need('frTel')}
 if(o.how==='hamb'&&!(C.hamDays||[]).length&&v('kibou')&&!/[0-9]/.test(hz(o.kibou)))ng.push('kibou');
 (o.how==='kojo'?['tel']:['tel','toTel','frTel']).forEach(function(i){if(v(i)&&!/^\d{10,11}$/.test(dg(o[i]))&&ng.indexOf(i)<0)ng.push(i)});
 (o.how==='kojo'?[]:['toZip','frZip']).forEach(function(i){if(v(i)&&!/^\d{7}$/.test(dg(o[i]))&&ng.indexOf(i)<0)ng.push(i)});
