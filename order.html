@@ -159,7 +159,7 @@ w.appendChild(f)});
 b.appendChild(w);
 var nt='',dt='';
 if(h==='kojo'){C.items.forEach(function(it){if(it.how==='kojo'&&it.was)nt+='<p class="small" style="margin:6px 0 0">※ '+it.name+'：<s>'+ye(it.was)+'</s> → <b style="color:#8b1a1a">'+ye(it.price)+'</b>'+(it.tag?'（'+it.tag+'）':'')+'</p>'});if(C.hamOpen)nt+='<p class="small" style="margin:6px 0 0">※ 原木ロースハムは「ロースハム発送」だけです（工場での受け取りはスライスだけ）。</p>'}
-if(h==='bin25')nt='<p class="small" style="margin:6px 0 0"><b>※ ほかに送料 '+ye(C.soryoReito)+'（お届け先1か所につき1回・税込・箱代込み）</b><br>※ 同じお届け先なら何箱でも、送料は1回です。別のお届け先は、もう一度カートに入れてください。<br>※ 代金と送料は先にお振り込み（振込手数料はお客様のご負担）。一部の離島（小笠原など）へはお送りできません。</p>';
+if(h==='bin25')nt='<p class="small" style="margin:6px 0 0"><b>※ ほかに送料 '+ye(C.soryoReito)+'（お届け先1か所につき1回・税込・箱代込み）</b><br>※ 同じお届け先なら何箱でも送料は1回。<b>別々の所へは、1か所ずつカートに入れてください。</b><br>※ 代金と送料は先にお振り込み（振込手数料はお客様のご負担）。一部の離島（小笠原など）へはお送りできません。</p>';
 if(h==='hamb')nt='<p class="small" style="margin:6px 0 0"><b>※ ほかに送料 1件につき1回 '+ye(C.hamSoryo)+'</b>（何個でも同じ箱でお届け・10kg程度まで）<br>※ 桑原ハムさんで直接お買い求めいただくより、お得です。</p>';
 if(h==='bin25')C.sets.forEach(function(x){dt+='<div><b>'+x.name+'</b>：'+x.note+'</div>'});else C.items.forEach(function(it){if(it.how===h)dt+='<div><b>'+it.name+'</b>：'+it.note+'</div>'});
 b.insertAdjacentHTML('beforeend',nt+'<details class="hd"><summary>くわしく</summary>'+dt+'</details><div class="slot" id="slot_'+h+'"></div><div class="tot hsub" id="sub_'+h+'"></div><button type="button" class="go addb" data-h="'+h+'" disabled>🛒 カートに入れる</button>')})})();
@@ -183,7 +183,7 @@ if(sr)lines+='<div class="sl"><span>'+(hm?'送料（何個でも1回）':'送料
 el('sub_'+h).innerHTML=hin?lines+'<div class="sk"><span>小計</span><b>'+(hin+sr).toLocaleString()+'円</b><small>（税込）</small></div>':'';
 el('sub_'+h).style.display=hin?'':'none';
 document.querySelector('#howBox .addb[data-h="'+h+'"]').disabled=!hin;el('hc_'+h).classList.toggle('on',!!hin)});
-var ship=(H==='bin25'||H==='hamb')&&cardQty(H)>0;el('yuso').classList.toggle('hide',!ship);el('kibouBox').classList.toggle('hide',H!=='hamb');el('kibouCBox').classList.toggle('hide',H!=='bin25')}
+(function(){var t=el('betsuMsg');if(!t){t=document.createElement('div');t.id='betsuMsg';t.style.cssText='margin:10px 0;padding:10px 12px;border:3px solid #c0392b;border-radius:10px;background:#fff6e0;font-size:15px;line-height:1.6';t.innerHTML='<b style="color:#c0392b;font-size:16px">📮 別々の所へ送る時は</b><br>① <b>1か所目の分だけ</b>数を入れて、お届け先を書いて「カートに入れる」<br>② もう一度ここで <b>2か所目の分</b>を選ぶ<br><span style="font-size:13px;color:#555">※ 送料はお届け先ごとに '+C.soryoReito.toLocaleString()+'円</span>'}var y=el('yuso');if(y&&y.parentNode&&t.nextSibling!==y)y.parentNode.insertBefore(t,y);t.style.display=(H==='bin25'&&cardQty('bin25')>=2)?'':'none'})();var ship=(H==='bin25'||H==='hamb')&&cardQty(H)>0;el('yuso').classList.toggle('hide',!ship);el('kibouBox').classList.toggle('hide',H!=='hamb');el('kibouCBox').classList.toggle('hide',H!=='bin25')}
 if(!C.hamOpen){var hb=el('hc_hamb');hb.classList.add('off');hb.insertAdjacentHTML('afterbegin','<span class="tag" style="float:right">準備中</span>')}
 calc();
 /* 青い字「※実際の商品写真」：その品の実物の写真（PH）を、その場の窓で大きく出す（セットは中身の写真を並べる）。背景か × で閉じる */
