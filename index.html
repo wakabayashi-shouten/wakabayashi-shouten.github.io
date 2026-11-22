@@ -24,7 +24,7 @@ a{color:inherit}
 @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 /* 直売会の帯 */
 .band{background:var(--red);color:#fff;text-align:center;padding:14px 16px;font-weight:bold;letter-spacing:.06em}
-.band a{display:inline-block;margin-left:8px;background:#fff;color:var(--red);border-radius:30px;padding:2px 14px;text-decoration:none;font-size:15px}
+.band .bgo{margin:44px 0 8px}.band .bgo p{margin:-30px 0 0}.band .go{background:#fff;color:var(--red)}/* 上の帯にも下と同じ黒・金ふち・日付つきのボタン（11/23 賢さん） */
 /* 共通 */
 section{padding:72px 20px}.w{max-width:680px;margin:0 auto}
 .lbl{display:block;text-align:center;font-size:12px;letter-spacing:.4em;color:var(--gold);margin-bottom:6px}
@@ -82,7 +82,7 @@ footer a{color:var(--cream)}
   <div class="scroll">SCROLL</div>
 </header>
 
-<div class="band">🎍 年末直売会 2026 ご予約受付中<a href="order.html">ご注文はこちら ›</a></div>
+<div class="band">🎍 年末直売会 2026 ご予約受付中<div class="bgo"><a class="go" href="order.html"><small>12月23日（水）24時まで受付</small><span>ORDER</span>ご注文はこちら ›</a></div></div>
 
 <section class="ph dk"><div class="w">
   <div class="gal">
@@ -122,4 +122,4 @@ footer a{color:var(--cream)}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.15});
 document.querySelectorAll('.rv').forEach(function(el,i){el.style.transitionDelay=(i%4)*0.12+'s';io.observe(el)});
 </script>
-<script>if(new Date()>new Date("2026-12-23T23:59:59+09:00")){var b=document.querySelector(".band");if(b)b.textContent="🎍 年末直売会 2026 ご予約の受け付けは締め切りました";var g=document.querySelector("a.go");if(g){var p=document.createElement("p");p.style.cssText="font-size:20px;font-weight:bold";p.textContent="受け付けは締め切りました";g.parentNode.replaceChild(p,g)}var s=document.querySelector(".ev .s");if(s)s.innerHTML="締め切り後は、直通 <a href=\"tel:09098437776\">090-9843-7776</a> へお電話ください"}</script></body></html>
+<script>if(new Date()>new Date("2026-12-23T23:59:59+09:00")){var b=document.querySelector(".band");if(b)b.firstChild.textContent="🎍 年末直売会 2026 ご予約の受け付けは締め切りました";document.querySelectorAll("a.go").forEach(function(g){var p=document.createElement("p");p.style.cssText="font-size:20px;font-weight:bold";p.textContent="受け付けは締め切りました";g.parentNode.replaceChild(p,g)});var s=document.querySelector(".ev .s");if(s)s.innerHTML="締め切り後は、直通 <a href=\"tel:09098437776\">090-9843-7776</a> へお電話ください"}</script></body></html>
