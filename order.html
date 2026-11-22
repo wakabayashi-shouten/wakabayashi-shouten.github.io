@@ -99,9 +99,9 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <div id="cart"></div><div id="cartMsg" class="err"></div>
 <div id="payBox" class="hide"><div style="font-weight:bold;font-size:18px;margin-top:10px">発送分のお支払い方法をお選びください</div><label class="rb"><input type="radio" name="pay" value="f" checked><span>🏦 ゆうちょへ先に振り込み<br><span class="small"><span class="kigen">12/23（水）</span>まで</span></span></label><label class="rb"><input type="radio" name="pay" value="g"><span>💴 12/30 に工場で、まとめて当日現金<br><span class="small">工場で受け取る分と一緒にお支払い</span></span></label><p class="small" style="margin:2px 0">※ 12月30日（水）に工場で受け取りがある方だけ選べます。</p></div>
 <h2>② ご注文の方</h2>
-<label>お名前（カタカナ）</label><input id="name" placeholder="ワカバヤシ タロウ" autocomplete="off"><div class="m16" style="margin-top:2px">※ <b>カタカナ</b>でご記入ください（ひらがなは自動でカタカナになります）。お振り込みの時は、このお名前でお願いします。</div>
+<label>お名前（カタカナ）</label><input id="name" placeholder="" autocomplete="off"><div class="m16" style="margin-top:2px">※ <b>カタカナ</b>でご記入ください（ひらがなは自動でカタカナになります）。お振り込みの時は、このお名前でお願いします。</div>
 <label>電話（携帯電話）</label><input id="tel" type="tel" autocomplete="tel"><div class="m16" style="margin-top:2px">※ ご注文の最終確認を<b>ショートメッセージ（SMS）</b>でお送りします。<b>携帯電話の番号</b>でご記入ください。携帯電話が無い場合は、ご自宅の番号で構いません（お電話で確認します）。</div><div id="telNote" class="hide" style="margin-top:4px;font-weight:bold;color:#8b1a1a">📞 携帯電話ではないようです。ご注文の後、お電話で確認します。</div>
-<label>メールアドレス <span class="small">（任意）</span></label><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="例：taro@example.com"><div class="m16" style="margin-top:2px;background:#fff;border:1px solid #bbb;border-radius:8px;padding:8px 10px">📧 <b>メールアドレスを入力いただけると、注文確定をスムーズに行います。</b><br>電話番号の場合、社員が確認次第返信いたしますので、少しお時間が空く場合があります。<br>どちらも注文確定 URL を送りますので、お手数ですが注文確定を押してください。</div>
+<div style="display:none"><input id="email" type="email"></div>
 <label>メモ <span class="small">（部署名など・無ければ空けてください）</span></label><input id="memo" autocomplete="off">
 
 
