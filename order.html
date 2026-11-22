@@ -17,7 +17,7 @@ h2{font-size:19px;margin:22px 0 8px;border-left:6px solid #8b1a1a;padding-left:8
 .qty{display:flex;align-items:center;gap:6px}
 .qty button{width:48px;height:48px;font-size:26px;border-radius:50%;border:2px solid #8b1a1a;background:#fff;color:#8b1a1a;font-weight:bold}
 .qty span{min-width:30px;text-align:center;font-size:24px;font-weight:bold}
-.thumbs{display:flex;gap:2%;margin-top:8px;align-items:flex-start}.thumbs .th{width:32%;max-width:170px;display:flex;flex-direction:column;align-items:center}.thumbs img{cursor:zoom-in;width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:6px;background:#fff}.thumbs .th i{font-style:normal;font-size:11px;line-height:1.3;text-align:center;margin-bottom:2px;color:#333}.thumbs .th .rz{background:#1565c0;color:#fff;border-radius:4px;padding:0 4px;font-size:10px;margin-right:3px;font-weight:bold}.thumbs .th b{font-size:12px;line-height:1.3;color:#7a1610;text-align:center;margin-top:2px}
+.thumbs{display:flex;gap:2%;margin-top:8px;align-items:flex-start}.thumbs .th{width:32%;max-width:170px;display:flex;flex-direction:column;align-items:center}.thumbs img{cursor:zoom-in;width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:6px;background:#fff}.thumbs .th i{font-style:normal;font-size:11px;line-height:1.3;text-align:center;margin-bottom:2px;color:#333}.thumbs .th .rz,details.hd .rz{background:#1565c0;color:#fff;border-radius:4px;padding:0 4px;font-size:10px;margin-right:3px;font-weight:bold}.thumbs .th b{font-size:12px;line-height:1.3;color:#7a1610;text-align:center;margin-top:2px}
 .hin{display:inline-block;font-size:16px;font-weight:bold;color:#333;background:#f4efe6;border-radius:6px;padding:2px 6px;margin:3px 0}
 .pick{font-size:19px;font-weight:bold;color:#8b1a1a;margin:6px 0}
 .hc{background:#fff;border:2px solid #bbb;border-radius:12px;padding:12px;margin:12px 0;font-size:18px;box-shadow:0 3px 0 #bbb}.hc.on{border:4px solid #1f7a3a;background:#f4fbf5;box-shadow:none}.hc.off{opacity:.55;pointer-events:none}
@@ -161,7 +161,7 @@ var nt='',dt='';
 if(h==='kojo'){}
 if(h==='bin25')nt='<p class="small" style="margin:6px 0 0">※ 同じお届け先なら4箱まで送料は1回。<b>別々の所へは、1か所ずつカートに入れてください。</b><br>※ 代金と送料は先にお振り込み（振込手数料はお客様のご負担）。一部の離島（小笠原など）へはお送りできません。</p>';
 if(h==='hamb')nt='<p class="small" style="margin:6px 0 0"><b>※ ほかに送料 1件につき1回 '+ye(C.hamSoryo)+'</b>（何個でも同じ箱でお届け・10kg程度まで）<br>※ 桑原ハムさんで直接お買い求めいただくより、お得です。</p>';
-if(h==='bin25')C.sets.forEach(function(x){dt+='<div><b>'+x.name+'</b>：'+x.note+'</div>'});else C.items.forEach(function(it){if(it.how===h)dt+='<div><b>'+it.name+'</b>：'+it.note+'</div>'});
+if(h==='bin25')C.sets.forEach(function(x){dt+='<div><b>'+x.name+'</b>：'+x.note+'</div>'});else C.items.forEach(function(it){if(it.how!==h)return;var DX={sir:'<span class="rz">冷凍</span> <b>和牛A5メス サーロイン薄切り</b>：1パック 約330g',buta:'<span class="rz">冷凍</span> <b>林SPF豚 特選ロース薄切り</b>：1パック 約450g',slice:'<b>桑原ハム ロースハム</b>：100gスライスパック ×5'};dt+='<div>'+(DX[it.key]||('<b>'+it.name+'</b>：'+it.note))+'</div>'});
 b.insertAdjacentHTML('beforeend',nt+'<details class="hd"><summary>くわしく</summary>'+dt+'</details><div class="slot" id="slot_'+h+'"></div><div class="tot hsub" id="sub_'+h+'"></div><button type="button" class="go addb" data-h="'+h+'" disabled>🛒 カートに入れる</button>')})})();
 function hamKg(q){var w=0;C.items.forEach(function(it){if(it.kg)w+=(q[it.key]||0)*it.kg});return w}
 function cardQty(h){if(h==='bin25'){var o=sq(S),n=0;Object.keys(o).forEach(function(k){n+=o[k]});return n}var n=0;C.items.forEach(function(it){if(it.how===h)n+=Q[it.key]});return n}
