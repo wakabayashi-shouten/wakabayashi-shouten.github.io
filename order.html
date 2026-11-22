@@ -198,7 +198,7 @@ var CART=[],GENKIN=false,SAME=false;
 var FLD=['toZip','toAddr','toName','toTel','kibou','kibouC','jikan','frName','frZip','frAddr','frTel'];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function val(i){return /Tel$|Zip$|^tel$/.test(i)?hy(el(i).value):hz(el(i).value)}
-function kata(s){s=String(s||'');if(s.normalize)s=s.normalize('NFKC');return s.replace(/[ぁ-ゖ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)+96)}).replace(/[\s　]+/g,' ').trim()}   // ひらがな・半角カナ → 全角カタカナ
+function kata(s){s=String(s||'');try{s=s.normalize('NFKC')}catch(e){};if(s.normalize)s=s.normalize('NFKC');return s.replace(/[ぁ-ゖ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)+96)}).replace(/[\s　]+/g,' ').trim()}   // ひらがな・半角カナ → 全角カタカナ
 function kataOk(s){return /^[ァ-ヶー・ ]+$/.test(s)}
 el('name').addEventListener('change',function(){el('name').value=kata(el('name').value)});
 function person(){var p={};['tel','memo'].forEach(function(i){p[i]=val(i)});p.name=kata(el('name').value);p.kana=p.name;el('name').value=p.name;   // お名前はカタカナ1つ（表の「お名前」「フリガナ」の両方に入る）
