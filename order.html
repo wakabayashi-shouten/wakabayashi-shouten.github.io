@@ -83,7 +83,7 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <p id="setNote" class="m16 hide">※ 1件で1か所・1箱です。2箱以上・2か所以上は、1箱ずつカートに入れてください。</p>
 <div id="yuso" class="hide">
 <h2>③ お届け先</h2>
-<button type="button" id="onaji" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button> <span class="small">（氏名・電話を、下の「ご注文の方」と同じにします）</span>
+<button type="button" id="onaji" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button> <span class="small">（お名前・電話を、下の「ご注文の方」と同じにします）</span>
 <label>郵便番号</label><input id="toZip" inputmode="numeric" placeholder="135-0036" autocomplete="shipping postal-code">
 <label>ご住所</label><input id="toAddr" autocomplete="shipping street-address">
 <label>氏名</label><input id="toName" autocomplete="shipping name">
@@ -106,8 +106,7 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <div id="cart"></div><div id="cartMsg" class="err"></div>
 <div id="payBox" class="hide"><div style="font-weight:bold;font-size:18px;margin-top:10px">発送分のお支払い方法をお選びください</div><label class="rb"><input type="radio" name="pay" value="f" checked><span>🏦 ゆうちょへ先に振り込み<br><span class="small"><span class="kigen">12/23（水）</span>まで</span></span></label><label class="rb"><input type="radio" name="pay" value="g"><span>💴 12/30 に工場で、まとめて当日現金<br><span class="small">工場で受け取る分と一緒にお支払い</span></span></label><p class="small" style="margin:2px 0">※ 12月30日（水）に工場で受け取りがある方だけ選べます。</p></div>
 <h2>④ ご注文の方</h2>
-<label>氏名</label><input id="name" autocomplete="name">
-<label>フリガナ <span class="small">（お振り込みの名前と同じに・郵送の方は必ず）</span></label><input id="kana" placeholder="ワカバヤシ タロウ" autocomplete="off">
+<label>お名前（カタカナ）</label><input id="name" placeholder="ワカバヤシ タロウ" autocomplete="off"><div class="m16" style="margin-top:2px">※ <b>カタカナ</b>でご記入ください（ひらがなは自動でカタカナになります）。お振り込みの時は、このお名前でお願いします。</div>
 <label>電話（携帯電話）</label><input id="tel" type="tel" autocomplete="tel"><div class="m16" style="margin-top:2px">※ ご注文の最終確認を<b>ショートメッセージ（SMS）</b>でお送りします。<b>携帯電話の番号</b>でご記入ください。携帯電話が無い場合は、ご自宅の番号で構いません（お電話で確認します）。</div><div id="telNote" class="hide" style="margin-top:4px;font-weight:bold;color:#8b1a1a">📞 携帯電話ではないようです。ご注文の後、お電話で確認します。</div>
 <label>メールアドレス <span class="small">（任意）</span></label><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="例：taro@example.com"><div class="m16" style="margin-top:2px;background:#fff;border:1px solid #bbb;border-radius:8px;padding:8px 10px">📧 <b>メールアドレスを入力いただけると、注文確定をスムーズに行います。</b><br>電話番号の場合、社員が確認次第返信いたしますので、少しお時間が空く場合があります。<br>どちらも注文確定 URL を送りますので、お手数ですが注文確定を押してください。</div>
 <label>メモ <span class="small">（部署名など・無ければ空けてください）</span></label><input id="memo" autocomplete="off">
@@ -179,7 +178,11 @@ var CART=[],GENKIN=false,SAME=false;
 var FLD=['toZip','toAddr','toName','toTel','kibou','kibouC','jikan','frName','frZip','frAddr','frTel'];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function val(i){return /Tel$|Zip$|^tel$/.test(i)?hy(el(i).value):hz(el(i).value)}
-function person(){var p={};['name','kana','tel','memo'].forEach(function(i){p[i]=val(i)});p.email=hz(el('email').value).replace(/＠/g,'@').replace(/．/g,'.');return p}
+function kata(s){s=String(s||'');if(s.normalize)s=s.normalize('NFKC');return s.replace(/[ぁ-ゖ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)+96)}).replace(/[\s　]+/g,' ').trim()}   // ひらがな・半角カナ → 全角カタカナ
+function kataOk(s){return /^[ァ-ヶー・ ]+$/.test(s)}
+el('name').addEventListener('change',function(){el('name').value=kata(el('name').value)});
+function person(){var p={};['tel','memo'].forEach(function(i){p[i]=val(i)});p.name=kata(el('name').value);p.kana=p.name;el('name').value=p.name;   // お名前はカタカナ1つ（表の「お名前」「フリガナ」の両方に入る）
+p.email=hz(el('email').value).replace(/＠/g,'@').replace(/．/g,'.');return p}
 function mailOk(m){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)}
 function setSame(v){SAME=v;['toName','toTel'].forEach(function(i){el(i).placeholder=v?'ご注文の方と同じ':'';if(v){el(i).value='';el(i).classList.remove('ng')}})}
 function entryNow(){var e={how:H,set:H==='bin25'?S:'',same:SAME};C.items.forEach(function(it){e[it.key]=(H&&H!=='bin25'&&it.how===(H==='hamb'?'hamb':'kojo'))?Q[it.key]:0});
@@ -231,7 +234,7 @@ function again(){RID=newRid();CART=[];GENKIN=false;el('done').classList.add('hid
 drawCart();
 el('onaji').onclick=function(){setSame(true)};['toName','toTel'].forEach(function(i){el(i).addEventListener('input',function(){if(SAME&&el(i).value)setSame(false)})});
 el('dojo').onclick=function(){el('frName').value=SAME?el('name').value:el('toName').value;el('frZip').value=el('toZip').value;el('frAddr').value=el('toAddr').value;el('frTel').value=SAME?el('tel').value:el('toTel').value;['frName','frZip','frAddr','frTel'].forEach(function(i){el(i).classList.remove('ng')})};
-var LB={email:'メールアドレス',kibou:'到着の希望日（日にちで）',how:'受け取り方',hin:'品と数',set:'セット',name:'氏名',kana:'フリガナ',tel:'電話',toZip:'お届け先の郵便番号',toAddr:'お届け先のご住所',toName:'お届け先の氏名',toTel:'お届け先の電話',frName:'送り主の氏名',frZip:'送り主の郵便番号',frAddr:'送り主のご住所',frTel:'送り主の電話'};
+var LB={email:'メールアドレス',kibou:'到着の希望日（日にちで）',how:'受け取り方',hin:'品と数',set:'セット',name:'お名前（カタカナで）',kana:'お名前（カタカナで）',tel:'電話',toZip:'お届け先の郵便番号',toAddr:'お届け先のご住所',toName:'お届け先の氏名',toTel:'お届け先の電話',frName:'送り主の氏名',frZip:'送り主の郵便番号',frAddr:'送り主のご住所',frTel:'送り主の電話'};
 function check(o){var ng=[],v=function(i){return String(o[i]||'').trim()},need=function(i){if(!v(i))ng.push(i)};
 if(!o.how)ng.push('how');else if(o.how==='bin25'){if(!o.set)ng.push('set')}else{var n=0;C.items.forEach(function(it){if(it.how===(o.how==='hamb'?'hamb':'kojo'))n+=o[it.key]||0});if(!n)ng.push('hin')}
 need('name');need('tel');
@@ -254,12 +257,12 @@ var f=el(BOXID[ng[0]]||ng[0]);if(f){f.scrollIntoView({behavior:'smooth',block:'c
 el('tel').addEventListener('input',telNote);
 document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',function(){e.classList.remove('ng')})});
 function bodyHtml(p){return CART.map(function(e,i){return entryHtml(e,i,false,p)}).join('')+totHtml()}
-function personHtml(p){return '<table class="kt"><tr><th>氏名</th><td>'+esc(p.name)+' 様'+(p.kana?'<br><span class="small">'+esc(p.kana)+'</span>':'')+'</td></tr><tr><th>電話</th><td>'+esc(p.tel)+'</td></tr>'+(p.email?'<tr><th>メール</th><td style="overflow-wrap:anywhere">'+esc(p.email)+'</td></tr>':'')+(p.memo?'<tr><th>メモ</th><td>'+esc(p.memo)+'</td></tr>':'')+'</table>'}
+function personHtml(p){return '<table class="kt"><tr><th>お名前</th><td>'+esc(p.name)+' 様</td></tr><tr><th>電話</th><td>'+esc(p.tel)+'</td></tr>'+(p.email?'<tr><th>メール</th><td style="overflow-wrap:anywhere">'+esc(p.email)+'</td></tr>':'')+(p.memo?'<tr><th>メモ</th><td>'+esc(p.memo)+'</td></tr>':'')+'</table>'}
 /* 「注文内容を確認する」：まだ送らない。カートと欄を確かめて、確認の画面を出す */
 el('go').onclick=function(){el('err').textContent='';document.querySelectorAll('.ce.ng').forEach(function(x){x.classList.remove('ng')});
 if(!CART.length){el('err').innerHTML=H?'まだカートに入っていません。上の<b>「🛒 カートに入れる」</b>を押してください。':'カートが空です。① ② で選んで「🛒 カートに入れる」を押してください。';el(H?'addCart':'howBox').scrollIntoView({behavior:'smooth',block:'center'});return}
 var p=person(),per={},by={};CART.forEach(function(e,i){check(full(e,p)).forEach(function(k){if(k==='name'||k==='kana'||k==='tel')per[k]=1;else if(e.same&&(k==='toName'||k==='toTel'))per[k==='toName'?'name':'tel']=1;else(by[i]=by[i]||[]).push(LB[k]||k)})});
-var pk=['name','kana','tel'].filter(function(k){return per[k]}),bi=Object.keys(by);if(p.email&&!mailOk(p.email))pk.push('email');
+var pk=['name','tel'].filter(function(k){return per[k]}),bi=Object.keys(by);if(p.name&&!kataOk(p.name))pk.unshift('name');if(p.email&&!mailOk(p.email))pk.push('email');
 markNg(pk,'err');
 if(bi.length){el('err').innerHTML+=(pk.length?'<br>':'')+bi.map(function(i){return 'カートの '+(+i+1)+' 番目：'+by[i].join('・')+'<br>→ カートの「✏ 直す」を押して直してください'}).join('<br>');bi.forEach(function(i){var c=document.querySelector('.ce[data-i="'+i+'"]');if(c)c.classList.add('ng')});if(!pk.length)document.querySelector('.ce.ng').scrollIntoView({behavior:'smooth',block:'center'})}
 if(pk.length||bi.length)return;
