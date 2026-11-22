@@ -109,6 +109,7 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <label>氏名</label><input id="name" autocomplete="name">
 <label>フリガナ <span class="small">（お振り込みの名前と同じに・郵送の方は必ず）</span></label><input id="kana" placeholder="ワカバヤシ タロウ" autocomplete="off">
 <label>電話（携帯電話）</label><input id="tel" type="tel" autocomplete="tel"><div class="m16" style="margin-top:2px">※ ご注文の最終確認を<b>ショートメッセージ（SMS）</b>でお送りします。<b>携帯電話の番号</b>でご記入ください。携帯電話が無い場合は、ご自宅の番号で構いません（お電話で確認します）。</div><div id="telNote" class="hide" style="margin-top:4px;font-weight:bold;color:#8b1a1a">📞 携帯電話ではないようです。ご注文の後、お電話で確認します。</div>
+<label>メールアドレス <span class="small">（任意）</span></label><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="例：taro@example.com"><div class="m16" style="margin-top:2px;background:#fff;border:1px solid #bbb;border-radius:8px;padding:8px 10px">📧 <b>メールアドレスを入力いただけると、注文確定をスムーズに行います。</b><br>電話番号の場合、社員が確認次第返信いたしますので、少しお時間が空く場合があります。<br>どちらも注文確定 URL を送りますので、お手数ですが注文確定を押してください。</div>
 <label>メモ <span class="small">（部署名など・無ければ空けてください）</span></label><input id="memo" autocomplete="off">
 
 
@@ -178,7 +179,8 @@ var CART=[],GENKIN=false,SAME=false;
 var FLD=['toZip','toAddr','toName','toTel','kibou','kibouC','jikan','frName','frZip','frAddr','frTel'];
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function val(i){return /Tel$|Zip$|^tel$/.test(i)?hy(el(i).value):hz(el(i).value)}
-function person(){var p={};['name','kana','tel','memo'].forEach(function(i){p[i]=val(i)});return p}
+function person(){var p={};['name','kana','tel','memo'].forEach(function(i){p[i]=val(i)});p.email=hz(el('email').value).replace(/＠/g,'@').replace(/．/g,'.');return p}
+function mailOk(m){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)}
 function setSame(v){SAME=v;['toName','toTel'].forEach(function(i){el(i).placeholder=v?'ご注文の方と同じ':'';if(v){el(i).value='';el(i).classList.remove('ng')}})}
 function entryNow(){var e={how:H,set:H==='bin25'?S:'',same:SAME};C.items.forEach(function(it){e[it.key]=(H&&H!=='bin25'&&it.how===(H==='hamb'?'hamb':'kojo'))?Q[it.key]:0});
 if(H&&H!=='kojo'){FLD.forEach(function(i){e[i]=val(i)});if((C.hamDays||[]).length)e.kibou=el('kibouSel').value==='指定なし'?'':el('kibouSel').value;if(H==='hamb')e.kibouC='';else e.kibou=''}
@@ -229,7 +231,7 @@ function again(){RID=newRid();CART=[];GENKIN=false;el('done').classList.add('hid
 drawCart();
 el('onaji').onclick=function(){setSame(true)};['toName','toTel'].forEach(function(i){el(i).addEventListener('input',function(){if(SAME&&el(i).value)setSame(false)})});
 el('dojo').onclick=function(){el('frName').value=SAME?el('name').value:el('toName').value;el('frZip').value=el('toZip').value;el('frAddr').value=el('toAddr').value;el('frTel').value=SAME?el('tel').value:el('toTel').value;['frName','frZip','frAddr','frTel'].forEach(function(i){el(i).classList.remove('ng')})};
-var LB={kibou:'到着の希望日（日にちで）',how:'受け取り方',hin:'品と数',set:'セット',name:'氏名',kana:'フリガナ',tel:'電話',toZip:'お届け先の郵便番号',toAddr:'お届け先のご住所',toName:'お届け先の氏名',toTel:'お届け先の電話',frName:'送り主の氏名',frZip:'送り主の郵便番号',frAddr:'送り主のご住所',frTel:'送り主の電話'};
+var LB={email:'メールアドレス',kibou:'到着の希望日（日にちで）',how:'受け取り方',hin:'品と数',set:'セット',name:'氏名',kana:'フリガナ',tel:'電話',toZip:'お届け先の郵便番号',toAddr:'お届け先のご住所',toName:'お届け先の氏名',toTel:'お届け先の電話',frName:'送り主の氏名',frZip:'送り主の郵便番号',frAddr:'送り主のご住所',frTel:'送り主の電話'};
 function check(o){var ng=[],v=function(i){return String(o[i]||'').trim()},need=function(i){if(!v(i))ng.push(i)};
 if(!o.how)ng.push('how');else if(o.how==='bin25'){if(!o.set)ng.push('set')}else{var n=0;C.items.forEach(function(it){if(it.how===(o.how==='hamb'?'hamb':'kojo'))n+=o[it.key]||0});if(!n)ng.push('hin')}
 need('name');need('tel');
@@ -252,12 +254,12 @@ var f=el(BOXID[ng[0]]||ng[0]);if(f){f.scrollIntoView({behavior:'smooth',block:'c
 el('tel').addEventListener('input',telNote);
 document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',function(){e.classList.remove('ng')})});
 function bodyHtml(p){return CART.map(function(e,i){return entryHtml(e,i,false,p)}).join('')+totHtml()}
-function personHtml(p){return '<table class="kt"><tr><th>氏名</th><td>'+esc(p.name)+' 様'+(p.kana?'<br><span class="small">'+esc(p.kana)+'</span>':'')+'</td></tr><tr><th>電話</th><td>'+esc(p.tel)+'</td></tr>'+(p.memo?'<tr><th>メモ</th><td>'+esc(p.memo)+'</td></tr>':'')+'</table>'}
+function personHtml(p){return '<table class="kt"><tr><th>氏名</th><td>'+esc(p.name)+' 様'+(p.kana?'<br><span class="small">'+esc(p.kana)+'</span>':'')+'</td></tr><tr><th>電話</th><td>'+esc(p.tel)+'</td></tr>'+(p.email?'<tr><th>メール</th><td style="overflow-wrap:anywhere">'+esc(p.email)+'</td></tr>':'')+(p.memo?'<tr><th>メモ</th><td>'+esc(p.memo)+'</td></tr>':'')+'</table>'}
 /* 「注文内容を確認する」：まだ送らない。カートと欄を確かめて、確認の画面を出す */
 el('go').onclick=function(){el('err').textContent='';document.querySelectorAll('.ce.ng').forEach(function(x){x.classList.remove('ng')});
 if(!CART.length){el('err').innerHTML=H?'まだカートに入っていません。上の<b>「🛒 カートに入れる」</b>を押してください。':'カートが空です。① ② で選んで「🛒 カートに入れる」を押してください。';el(H?'addCart':'howBox').scrollIntoView({behavior:'smooth',block:'center'});return}
 var p=person(),per={},by={};CART.forEach(function(e,i){check(full(e,p)).forEach(function(k){if(k==='name'||k==='kana'||k==='tel')per[k]=1;else if(e.same&&(k==='toName'||k==='toTel'))per[k==='toName'?'name':'tel']=1;else(by[i]=by[i]||[]).push(LB[k]||k)})});
-var pk=['name','kana','tel'].filter(function(k){return per[k]}),bi=Object.keys(by);
+var pk=['name','kana','tel'].filter(function(k){return per[k]}),bi=Object.keys(by);if(p.email&&!mailOk(p.email))pk.push('email');
 markNg(pk,'err');
 if(bi.length){el('err').innerHTML+=(pk.length?'<br>':'')+bi.map(function(i){return 'カートの '+(+i+1)+' 番目：'+by[i].join('・')+'<br>→ カートの「✏ 直す」を押して直してください'}).join('<br>');bi.forEach(function(i){var c=document.querySelector('.ce[data-i="'+i+'"]');if(c)c.classList.add('ng')});if(!pk.length)document.querySelector('.ce.ng').scrollIntoView({behavior:'smooth',block:'center'})}
 if(pk.length||bi.length)return;
@@ -265,14 +267,14 @@ var t=sums(),k=el('kakunin');
 k.innerHTML='<div class="tot" style="text-align:center"><div style="font-size:24px;font-weight:bold;color:#8b1a1a">ご注文内容の確認</div><div style="font-weight:bold">まだ送信されていません。<br>下の内容を確かめて、いちばん下のボタンを押してください。</div></div><h2>ご注文の方</h2>'+personHtml(p)+'<h2>ご注文の中身</h2>'+bodyHtml(p)+(t.matome?'<p class="m16"><b>※ 発送分も、12/30 に工場でまとめて現金でお支払いいただきます。</b></p>':'')+(t.furi?'<p class="m16">※ お振り込み先は、次の画面と SMS でお知らせします（期限：<b>'+esc(C.kigen||'')+'</b>まで）。</p>':'')+'<div class="err" id="err2"></div><button class="go" id="send">この内容で注文する</button><button class="go2" id="back">‹ 戻って直す</button>';
 el('form').classList.add('hide');k.classList.remove('hide');bar();scrollTo(0,0);
 el('back').onclick=function(){k.classList.add('hide');k.innerHTML='';el('form').classList.remove('hide');bar();el('cartH').scrollIntoView({block:'start'})};
-el('send').onclick=function(){var c={rid:RID,genkin:t.matome,name:p.name,kana:p.kana,tel:p.tel,memo:p.memo,entries:CART.map(function(e){var x={};Object.keys(e).forEach(function(q){x[q]=e[q]});return x})};
+el('send').onclick=function(){var c={rid:RID,genkin:t.matome,name:p.name,kana:p.kana,tel:p.tel,email:p.email,memo:p.memo,entries:CART.map(function(e){var x={};Object.keys(e).forEach(function(q){x[q]=e[q]});return x})};
 el('err2').textContent='';el('send').disabled=true;el('back').disabled=true;el('send').textContent='送っています…';var body=bodyHtml(p);
 GSR.withSuccessHandler(function(r){k.classList.add('hide');k.innerHTML='';var d=el('done');d.classList.remove('hide');
-var s='<div class="tot"><div style="font-size:24px;font-weight:bold;color:#8b1a1a">📝 仮受付しました</div><p style="font-size:20px">受付番号 <b style="font-size:30px">'+esc(r.no)+'</b>'+((r.nos||[]).length>1?'<br><span class="small">（'+r.nos.map(esc).join('・')+'）</span>':'')+'</p><p><b>まだ確定していません。</b>ショートメッセージ（SMS）に、ご注文を確定する URL をお送りします。URL にアクセスし、ご注文内容を確定してください。</p><p style="font-size:15px">（お電話番号とお名前だけでご注文できる仕組みのため、なりすまし防止として、URL からご注文内容の最終確認をお願いしております。）</p></div>'+body;
+var s='<div class="tot"><div style="font-size:24px;font-weight:bold;color:#8b1a1a">📝 仮受付しました</div><p style="font-size:20px">受付番号 <b style="font-size:30px">'+esc(r.no)+'</b>'+((r.nos||[]).length>1?'<br><span class="small">（'+r.nos.map(esc).join('・')+'）</span>':'')+'</p><p><b>まだ確定していません。</b>'+(r.mail==='ok'?'<b>メール</b>に、ご注文を確定する URL をお送りしました。':'ショートメッセージ（SMS）に、ご注文を確定する URL をお送りします。')+'URL にアクセスし、ご注文内容を確定してください。</p><p style="font-size:15px">（お電話番号とお名前だけでご注文できる仕組みのため、なりすまし防止として、URL からご注文内容の最終確認をお願いしております。）</p></div>'+body;
 if(r.total!==t.all)s+='<p class="err">※ 合計は '+yen(r.total)+' です。</p>';
 if(r.genkinTotal)s+='<div class="tot"><b>12/30（水）工場で、当日現金でお支払い</b><p>合計 <span class="big">'+yen(r.genkinTotal)+'</span></p>'+(r.genkin?'<p class="small">※ 発送分も、12/30 にまとめて現金でお支払いいただきます。</p>':'')+'</div>';
 if(r.furiTotal)s+='<div class="tot"><b>お振り込みのお願い</b><p>合計 <span class="big">'+yen(r.furiTotal)+'</span> を先にお振り込みください。</p>'+(r.kigen?'<p>振り込みの期限：<b>'+r.kigen+'まで</b></p>':'')+'<p>'+(r.furikomi?r.furikomi.replace(/\n/g,'<br>'):'<b>振込先は、後でお電話かメッセージでお知らせします。</b>')+'</p><p class="small">※ ご入金を確かめてから発送します。期限の日のご注文は、その日のうちにお振り込みください。</p></div>';
-s+='<p style="font-size:17px">📱 SMS は数時間以内に <b>090-9843-7776</b> から届きます（届かない時はお電話ください）。</p>';
+if(r.mail==='ok')s+='<p style="font-size:17px">📧 <b>確定の URL をメールでお送りしました</b>（'+esc(p.email)+'）。<br>届かない時は、迷惑メールのフォルダもご確認ください。それでも無い時はお電話ください。</p>';else s+=(p.email?'<p style="font-size:17px"><b>※ メールをお送りできませんでした。SMS でお送りします。</b></p>':'')+'<p style="font-size:17px">📱 SMS は数時間以内に <b>090-9843-7776</b> から届きます（届かない時はお電話ください）。</p>';
 s+='<p class="small">※ この画面を写真に撮っておくと安心です。お問い合わせ TEL 090-9843-7776</p>';s+='<button class="go2" id="again">続けて、別のご注文をする</button><p class="small">※ お名前などは残っています。</p>';d.innerHTML=s;el('again').onclick=again;CART=[];bar();scrollTo(0,0)})
 .withFailureHandler(function(e){var m=String(e.message||e).replace(/\s*\[\[[a-zA-Z,]*\]\]/,'');el('err2').textContent=m;el('send').disabled=false;el('back').disabled=false;el('send').textContent='この内容で注文する'}).submitOrder(c)}};
 
