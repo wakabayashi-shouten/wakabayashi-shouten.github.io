@@ -190,7 +190,7 @@ calc();
 (function(){var p=document.createElement('div');p.id='phPop';p.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:9999;padding:16px;overflow:auto;text-align:center';p.onclick=function(){p.style.display='none'};document.body.appendChild(p);
 document.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('a.jitsu'):null;if(!a)return;e.preventDefault();var k=a.dataset.ph,st=C.sets.filter(function(x){return x.key===k})[0],ks=st?Object.keys(st.q):[k];
 var h='<span style="position:fixed;top:8px;right:16px;color:#fff;font-size:38px;line-height:1">×</span><div style="color:#fff;font-weight:bold;font-size:18px;margin:6px 0 4px">実際の商品写真'+(st?'（'+st.name+'）':'')+'</div>';
-ks.forEach(function(q){if(!PH[q])return;var it=C.items.filter(function(z){return z.key===q})[0];h+='<div style="color:#fff;font-size:15px;margin:10px 0 4px">'+(it?it.name:'')+(st&&st.q[q]>1?'　×'+st.q[q]:'')+'</div><img src="'+PH[q]+'" alt="" style="max-width:100%;max-height:70vh;background:#fff;border-radius:8px">'});
+ks.forEach(function(q){if(!PH[q])return;var it=C.items.filter(function(z){return z.key===q})[0];var nn=st?(st.q[q]||1):1;for(var j=1;j<=nn;j++)h+='<div style="color:#fff;font-size:15px;margin:10px 0 4px">'+(it?it.name:'')+(nn>1?'　（'+j+'パック目）':'')+'</div><img src="'+PH[q]+'" alt="" style="max-width:100%;max-height:'+(st?'40vh':'70vh')+';background:#fff;border-radius:8px">'});
 p.innerHTML=h+'<div style="color:#fff;font-size:14px;margin-top:10px">（どこを押しても閉じます）</div>';p.style.display='block'})})();
 /* ===== カート（11/22）：受け取り方ごとに「カートに入れる」→ まとめて確認 → 1回で送る ===== */
 var CART=[],GENKIN=false,SAME=false;
