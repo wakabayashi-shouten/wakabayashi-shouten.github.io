@@ -229,14 +229,15 @@ function cnt(e){var c={};C.items.forEach(function(it){c[it.key]=0});if(e.how==='
 function money(e){var c=cnt(e),h=0;C.items.forEach(function(it){h+=c[it.key]*it.price});var s=(e.how==='kojo'||!h)?0:(e.how==='hamb'?C.hamSoryo:C.soryoReito);return{hin:h,so:s,tot:h+s}}
 function sums(){var k=0,y=0,hasK=false;CART.forEach(function(e){var m=money(e);if(e.how==='kojo'){k+=m.tot;hasK=true}else y+=m.tot});var g=GENKIN&&hasK&&y>0;return{kojo:k,yuso:y,all:k+y,genkin:g?k+y:k,furi:g?0:y,hasK:hasK,matome:g}}
 function howName(e){return{kojo:'🤝 12/30（水）工場直売会で受け取り',bin25:'🎁 ギフトボックス（'+C.hasso1+' クール便で発送）',hamb:'🎁 ロースハム発送（桑原ハムさんから直送）'}[e.how]}
-function toHtml(e,p,detail){if(e.how==='kojo')return '';var s='<div class="ce-to">📮 お届け先：'+(e.same?(p&&p.name?esc(p.name)+' 様':'ご注文の方と同じ'):esc(e.toName)+' 様')+'<br>〒'+esc(e.toZip)+'　'+esc(e.toAddr);
+function toHtml(e,p,detail){if(e.how==='kojo')return '';var gv=function(i){var x=document.getElementById(i);return x?x.value:''},nm=e.same?((p&&p.name)||gv('nameK')||gv('name')):e.toName,tl=e.same?((p&&p.tel)||gv('tel')):e.toTel,L=function(k,v){return '<div style="display:flex;gap:6px"><span style="flex:0 0 4.5em;color:#555">'+k+'</span><span>'+esc(v||'')+'</span></div>'};
+var s='<div class="ce-to"><b>📮 お届け先</b>'+L('お名前',nm?nm+' 様':'')+L('〒',e.toZip)+L('ご住所',e.toAddr)+(detail||true?L('電話',tl):'');
 var kb=e.how==='hamb'?e.kibou:(/^指定なし/.test(e.kibouC||'')?'':e.kibouC),jk=(e.jikan&&e.jikan!=='指定なし')?e.jikan:'';
-if(kb||jk)s+='<br>お届けの希望：'+esc([kb,jk].filter(Boolean).join('・'));
-if(detail){s+='<br>電話：'+esc(e.same?p.tel:e.toTel);if(e.frName||e.frAddr)s+='<br>送り主：'+esc(e.frName||p.name)+(e.frAddr?'（〒'+esc(e.frZip)+'　'+esc(e.frAddr)+'）':'')}
+if(kb||jk)s+=L('希望',[kb,jk].filter(Boolean).join('・'));
+if(e.frName||e.frAddr)s+='<div style="margin-top:6px"><b>✉ 送り主</b></div>'+L('お名前',(e.frName||(p&&p.name)||'')+' 様')+L('〒',e.frZip)+L('ご住所',e.frAddr)+L('電話',e.frTel||(p&&p.tel)||gv('tel'));
 return s+'</div>'}
 function entryHtml(e,i,edit,p){var c=cnt(e),m=money(e),qb=edit&&e.how!=='bin25',s='<div class="ce" data-i="'+i+'"><div class="ce-h">'+(CART.length>1?'<span class="ce-n">'+(i+1)+'</span>':'')+howName(e)+'</div>';
 if(e.how==='bin25'){s+='<div class="row"><b>📦 '+esc(setNames(e.set))+'</b></div>'}
-C.items.forEach(function(it){if(c[it.key]){s+='<div class="row"><span>'+it.name+(qb?'':'　'+c[it.key]+it.unit)+'</span><span>'+(qb?'<span class="cq"><button type="button" data-i="'+i+'" data-k="'+it.key+'" data-d="-1">−</button><b>'+c[it.key]+'</b><button type="button" data-i="'+i+'" data-k="'+it.key+'" data-d="1">＋</button></span>':'')+yen(c[it.key]*it.price)+'</span></div>'}});
+var SN={sir:'和牛サーロイン',buta:'林SPF豚ロース',slice:'ロースハム 100g×5',genboku:'ロースハム原木',slice10:'ロースハム 100g×10'};C.items.forEach(function(it){if(c[it.key]){s+='<div class="row"><span>'+(SN[it.key]||it.name)+(qb?'':'　'+c[it.key]+it.unit)+'</span><span>'+(qb?'<span class="cq"><button type="button" data-i="'+i+'" data-k="'+it.key+'" data-d="-1">−</button><b>'+c[it.key]+'</b><button type="button" data-i="'+i+'" data-k="'+it.key+'" data-d="1">＋</button></span>':'')+yen(c[it.key]*it.price)+'</span></div>'}});
 if(m.so)s+='<div class="row"><span>'+(e.how==='hamb'?'送料（何個でも1回）':'送料（箱代込み）')+'</span><span>'+yen(m.so)+'</span></div>';
 s+=toHtml(e,p,!edit);
 s+='<div class="row ce-s"><b>小計</b><span><b>'+yen(m.tot)+'</b></span></div>';
