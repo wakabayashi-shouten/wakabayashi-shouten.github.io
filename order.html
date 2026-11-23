@@ -82,17 +82,17 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <div id="maxMsg" class="err hide">1つの品は <span class="maxN">20</span> までです。多い時はお電話ください（TEL <a href="tel:09098437776">090-9843-7776</a>）</div>
 <div id="yuso" class="hide">
 <div class="pick">📮 お届け先</div>
-<button type="button" id="onaji" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button> <span class="small">（お名前・電話を、下の「ご注文の方」と同じにします）</span>
+<button type="button" id="onaji" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button> <span class="small">（上の「ご注文の方」と同じにします）</span>
 <label>郵便番号</label><input id="toZip" inputmode="numeric" autocomplete="shipping postal-code">
 <label>都道府県・市区町村 <span class="small">（郵便番号から自動で入ります）</span></label><input id="toA1" autocomplete="off"><label>番地・建物名</label><input id="toAddr" autocomplete="shipping street-address">
-<label>氏名</label><input id="toName" autocomplete="shipping name">
+<label>お名前</label><input id="toName" autocomplete="shipping name">
 <label>電話</label><input id="toTel" type="tel" autocomplete="shipping tel">
 <div id="kibouBox" class="hide"><label>到着の希望日 <span class="small">（指定できます）</span></label><input id="kibou"><select id="kibouSel" class="hide"><option>指定なし</option></select><p class="small" style="margin:2px 0">※ 日にち（例：12/28）でご記入ください。指定がない場合は、最短でお届けします。</p></div>
 <div id="kibouCBox" class="hide"><label>お届けの希望日</label><select id="kibouC"><option>指定なし（いちばん早い日の午前中）</option></select><p class="small" style="margin:2px 0">※ 北海道・九州・沖縄などの遠い地域は、<span class="kc2"></span>以降のお届けになります。</p></div>
 <label>お届けの時間帯</label><select id="jikan" ><option selected>指定なし</option><option>午前中</option><option>14〜16時</option><option>16〜18時</option><option>18〜20時</option><option>19〜21時</option></select>
-<label>送り主（差出人） <button type="button" id="frChu" style="width:auto;font-size:16px;padding:4px 14px;margin-left:8px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button> <button type="button" id="dojo" style="width:auto;font-size:16px;padding:4px 14px;margin-left:8px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">お届け先と同じ</button></label>
-<p class="small" style="margin:2px 0 4px">※ 送り主の 〒・ご住所・お名前（漢字で）・電話を書いてください。ボタンを押すと入ります。</p>
-<label>郵便番号</label><input id="frZip" inputmode="numeric" autocomplete="billing postal-code" style="margin-top:6px"><label>都道府県・市区町村 <span class="small">（郵便番号から自動で入ります）</span></label><input id="frA1" autocomplete="off"><label>番地・建物名</label><input id="frAddr" autocomplete="billing street-address" style="margin-top:6px"><label>氏名</label><input id="frName" autocomplete="billing name"><label>電話</label><input id="frTel" type="tel" autocomplete="billing tel" style="margin-top:6px">
+<div class="pick">✉ 送り主（差出人）</div>
+<button type="button" id="frChu" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button><button type="button" id="dojo" style="display:none;width:auto;font-size:16px;padding:4px 14px;margin-left:8px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">お届け先と同じ</button> <span class="small">（上の「ご注文の方」と同じにします）</span>
+<label>郵便番号</label><input id="frZip" inputmode="numeric" autocomplete="billing postal-code"><label>都道府県・市区町村 <span class="small">（郵便番号から自動で入ります）</span></label><input id="frA1" autocomplete="off"><label>番地・建物名</label><input id="frAddr" autocomplete="billing street-address"><label>お名前</label><input id="frName" autocomplete="billing name"><label>電話</label><input id="frTel" type="tel" autocomplete="billing tel" style="margin-top:6px">
 <p class="small">※ 2か所以上に送る時は、1か所ずつカートに入れてください。</p>
 </div>
 
