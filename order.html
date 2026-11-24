@@ -82,18 +82,20 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <div id="kgMsg" class="err hide">10kg を超える時はお電話ください（TEL <a href="tel:09098437776">090-9843-7776</a>）</div>
 <div id="maxMsg" class="err hide">1つの品は <span class="maxN">20</span> までです。多い時はお電話ください（TEL <a href="tel:09098437776">090-9843-7776</a>）</div>
 <div id="yuso" class="hide">
-<div class="pick">📮 お届け先</div>
-<button type="button" id="onaji" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button> <span class="small">（上の「ご注文の方」と同じにします）</span>
+<div style="border:3px solid #8b1a1a;border-radius:10px;overflow:hidden;margin:10px 0;background:#fff"><div style="background:#8b1a1a;color:#fff;font-weight:bold;font-size:19px;padding:8px 12px">📮 ① お届け先<div style="font-size:13px;font-weight:normal">荷物が届く所・受け取る方</div></div><div style="padding:6px 10px 10px">
+<button type="button" id="onaji" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold;margin-top:6px">ご注文の方と同じ</button> <span class="small">（上の「ご注文の方」をここに写します）</span>
 <label>郵便番号</label><input id="toZip" inputmode="numeric" autocomplete="shipping postal-code">
 <label>都道府県・市区町村 <span class="small">（郵便番号から自動で入ります）</span></label><input id="toA1" autocomplete="off"><label>番地・建物名</label><input id="toAddr" autocomplete="shipping street-address">
-<label>お名前</label><input id="toName" autocomplete="shipping name">
-<label>電話</label><input id="toTel" type="tel" autocomplete="shipping tel">
+<label>受け取る方のお名前</label><input id="toName" autocomplete="shipping name">
+<label>受け取る方の電話</label><input id="toTel" type="tel" autocomplete="shipping tel">
 <div id="kibouBox" class="hide"><label>到着の希望日 <span class="small">（指定できます）</span></label><input id="kibou"><select id="kibouSel" class="hide"><option>指定なし</option></select><p class="small" style="margin:2px 0">※ 日にち（例：12/28）でご記入ください。指定がない場合は、最短でお届けします。</p></div>
 <div id="kibouCBox" class="hide"><label>お届けの希望日</label><select id="kibouC"><option>指定なし（いちばん早い日の午前中）</option></select><p class="small" style="margin:2px 0">※ 北海道・九州・沖縄などの遠い地域は、12/28（月）以降のお届けになります。<br>※ 配送業者の状況によっては、ご希望の日に届かない場合もございます。</p></div>
 <label>お届けの時間帯</label><select id="jikan" ><option selected>指定なし</option><option>午前中</option><option>14〜16時</option><option>16〜18時</option><option>18〜20時</option><option>19〜21時</option></select>
-<div class="pick">✉ 送り主（差出人）</div>
-<button type="button" id="frChu" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">ご注文の方と同じ</button><button type="button" id="dojo" style="display:none;width:auto;font-size:16px;padding:4px 14px;margin-left:8px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">お届け先と同じ</button> <span class="small">（上の「ご注文の方」と同じにします）</span>
-<label>郵便番号</label><input id="frZip" inputmode="numeric" autocomplete="billing postal-code"><label>都道府県・市区町村 <span class="small">（郵便番号から自動で入ります）</span></label><input id="frA1" autocomplete="off"><label>番地・建物名</label><input id="frAddr" autocomplete="billing street-address"><label>お名前</label><input id="frName" autocomplete="billing name"><label>電話</label><input id="frTel" type="tel" autocomplete="billing tel" style="margin-top:6px">
+</div></div>
+<div style="border:3px solid #666;border-radius:10px;overflow:hidden;margin:14px 0 10px;background:#fff"><div style="background:#666;color:#fff;font-weight:bold;font-size:19px;padding:8px 12px">✉ ② 送り主（差出人）<div style="font-size:13px;font-weight:normal">伝票の「ご依頼主」に書く名前・住所</div></div><div style="padding:6px 10px 10px">
+<button type="button" id="frChu" style="width:auto;font-size:16px;padding:4px 14px;margin:0 0 4px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold;margin-top:6px">ご注文の方と同じ</button><button type="button" id="dojo" style="display:none;width:auto;font-size:16px;padding:4px 14px;margin-left:8px;border:2px solid #8b1a1a;border-radius:8px;background:#fff;color:#8b1a1a;font-weight:bold">お届け先と同じ</button> <span class="small">（上の「ご注文の方」をここに写します）</span>
+<label>郵便番号</label><input id="frZip" inputmode="numeric" autocomplete="billing postal-code"><label>都道府県・市区町村 <span class="small">（郵便番号から自動で入ります）</span></label><input id="frA1" autocomplete="off"><label>番地・建物名</label><input id="frAddr" autocomplete="billing street-address"><label>送り主のお名前</label><input id="frName" autocomplete="billing name"><label>送り主の電話</label><input id="frTel" type="tel" autocomplete="billing tel" style="margin-top:6px">
+</div></div>
 <p class="small">※ 2か所以上に送る時は、1か所ずつカートに入れてください。</p>
 </div>
 
@@ -319,9 +321,23 @@ if(r.total!==t.all)s+='<p class="err">※ 合計は '+yen(r.total)+' です。</
 if(r.genkinTotal)s+='<div class="tot"><b>12/30（水）工場で、当日現金でお支払い</b><p>合計 <span class="big">'+yen(r.genkinTotal)+'</span></p>'+(r.genkin?'<p class="small">※ 発送分も、12/30 にまとめて現金でお支払いいただきます。</p>':'')+'</div>';
 if(r.furiTotal)s+='<div class="tot"><b>お振り込みのお願い</b><p>合計 <span class="big">'+yen(r.furiTotal)+'</span> を先にお振り込みください。</p>'+(r.kigen?'<p>振り込みの期限：<b>'+r.kigen+'まで</b></p>':'')+'<p>'+(r.furikomi?r.furikomi.replace(/\n/g,'<br>'):'<b>振込先は、後でお電話かメッセージでお知らせします。</b>')+'</p><p class="small">※ ご入金を確認できた時点でご注文確定です。期限の日のご注文は、その日のうちにお振り込みください。</p></div>';
 if(r.mail==='ok')s+='<p style="font-size:17px">📧 <b>確定の URL をメールでお送りしました</b>（'+esc(p.email)+'）。<br>届かない時は、迷惑メールのフォルダもご確認ください。それでも無い時はお電話ください。</p>';else s+=(p.email?'<p style="font-size:17px"><b>※ メールをお送りできませんでした。SMS でお送りします。</b></p>':'')+'<p style="font-size:17px">📱 SMS は数時間以内に <b>090-9843-7776</b> から届きます（届かない時はお電話ください）。</p>';
-s+='<p class="small">※ この画面を写真に撮っておくと安心です。お問い合わせ TEL <a href="tel:09098437776">090-9843-7776</a></p><p style="font-weight:bold">注文確定後の変更は、090-9843-7776 へ SMS もしくはお電話ください。</p>';d.innerHTML=s;CART=[];bar();scrollTo(0,0)})
+s+='<p class="small">お問い合わせ TEL <a href="tel:09098437776">090-9843-7776</a></p><p style="font-weight:bold">注文確定後の変更は、090-9843-7776 へ SMS もしくはお電話ください。</p>';
+var SV=(HK&&r.mail!=='ok')?'<p style="margin:10px 0 0;font-size:16px;line-height:1.7">保存したら、数日以内に <b>090-9843-7776</b> から届くショートメッセージ（SMS）の URL を開き、<b>ご注文を確定</b>させてください。<br><span class="small">※ SMS をお送りしてから数日以内に確定の操作がなかった場合は、上記の電話番号からお電話で確認させていただきます。</span></p>':'';
+s='<div class="tot" style="border-color:#1565c0;text-align:center"><button type="button" id="hozonBtn" class="go" style="background:#1565c0;font-size:22px">📷 注文書を保存</button><p class="small" style="margin:6px 0 0">ご注文の内容を、写真（画像）にして保存します</p>'+SV+'</div>'+s;
+d.innerHTML=s;var HZ=d.cloneNode(true);HZ.querySelectorAll('button,#hozonBtn').forEach(function(b){b.remove()});var HT=(HZ.innerText||HZ.textContent||'');
+el('hozonBtn').onclick=function(){hozonSheet(r.no,HT)};CART=[];bar();scrollTo(0,0)})
 .withFailureHandler(function(e){var m=String(e.message||e).replace(/\s*\[\[[a-zA-Z,]*\]\]/,'');el('err2').textContent=m;el('send').disabled=false;el('back').disabled=false;el('send').textContent='この内容で注文する'}).submitOrder(c)}};
 
+function hozonSheet(no,txt){      /* 受付の画面の字を1枚の画像にして保存（iPhone は「画像を保存」・できなければ画像を出して長押し・11/24 賢さん） */
+var W=1080,PAD=60,FS=34,LH=52,c=document.createElement('canvas'),g=c.getContext('2d');g.font=FS+'px sans-serif';
+var src=String(txt).split('\n').map(function(x){return x.replace(/\s+$/,'')}).filter(function(x,i,a){return x||(a[i-1]||'')});
+var L=[];src.forEach(function(x){if(!x){L.push('');return}var cur='';for(var i=0;i<x.length;i++){if(g.measureText(cur+x[i]).width>W-PAD*2){L.push(cur);cur=''}cur+=x[i]}L.push(cur)});
+c.width=W;c.height=PAD*2+150+L.length*LH;g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);
+g.fillStyle='#8b1a1a';g.font='bold 52px sans-serif';g.fillText('年末直売会 ご注文書',PAD,PAD+50);g.font='30px sans-serif';g.fillStyle='#555';g.fillText('株式会社若林商店　TEL 090-9843-7776',PAD,PAD+100);
+g.fillStyle='#222';L.forEach(function(x,i){g.font=(/^(受付番号|合計|全部の合計|📝)/.test(x)?'bold ':'')+FS+'px sans-serif';g.fillText(x,PAD,PAD+170+i*LH)});
+c.toBlob(function(b){var name='年末直売会_注文書_'+no+'.png';try{var f=new File([b],name,{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'年末直売会 ご注文書'}).catch(function(){});return}}catch(e){}
+var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+var o=el('zoomPop');if(o){o.firstChild.src=u;o.style.display='flex'}},'image/png')}
 (function(){var o=document.createElement('div');o.id='zoomPop';o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px';o.innerHTML='<img style="max-width:100%;max-height:90vh;background:#fff;border-radius:8px"><span style="position:absolute;top:12px;right:16px;color:#fff;font-size:34px;line-height:1">×</span>';o.onclick=function(){o.style.display='none'};document.body.appendChild(o);
 document.addEventListener('click',function(e){var t=e.target;if(t.tagName==='IMG'&&t.closest&&t.closest('.thumbs')){e.preventDefault();e.stopPropagation();o.firstChild.src=t.src;o.style.display='flex'}},true)})();
 
