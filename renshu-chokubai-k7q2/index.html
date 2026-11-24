@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+<head><script>
+/* 練習用：確認の小窓は自動で「OK」・知らせは右下に出す（自動で操作して確かめられるように） */
+window.confirm=function(m){ __toast('✅ 確認の小窓（自動でOK）：'+m); return true; };
+window.alert=function(m){ __toast('ℹ '+m); };
+function __toast(m){ let b=document.getElementById('__tl'); if(!b){ b=document.createElement('div'); b.id='__tl'; b.style.cssText='position:fixed;right:10px;bottom:10px;z-index:99999;max-width:420px;display:flex;flex-direction:column;gap:6px'; document.body.appendChild(b); }
+  const d=document.createElement('div'); d.className='__toast'; d.style.cssText='background:#333;color:#fff;padding:8px 12px;border-radius:8px;font-size:13px;white-space:pre-wrap;box-shadow:0 2px 6px rgba(0,0,0,.3)'; d.textContent=String(m); b.appendChild(d); setTimeout(()=>d.remove(),12000); }
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>直売（練習用）</title><meta name="robots" content="noindex,nofollow">
@@ -103,7 +109,7 @@ window.fetch=async function(u,o){
 </head>
 <body>
 
-<div id="renshu" style="background:#fff3cd;border-bottom:3px solid #e0b84a;padding:10px 18px;font-size:14px;line-height:1.6"><b style="font-size:16px">🧪 練習用の画面（作り物のお客さん）</b>　本物の注文・お客さん・印刷・SMS には何も届きません。押した結果はこのブラウザの中だけで、ページを開き直すと最初に戻ります。<br><a href="renshu_yucho.csv" download>📄 練習用のゆうちょ CSV を取る</a>（②の「📥 ゆうちょの CSV を入れる」で入れてみてください）　<button onclick="location.reload()" style="margin-left:8px">↺ 最初に戻す</button><span id="pyst" style="margin-left:12px;color:#8a5a00;font-weight:bold">⏳ 準備しています（初回は10〜20秒）…</span></div><main>
+<div id="renshu" style="background:#fff3cd;border-bottom:3px solid #e0b84a;padding:10px 18px;font-size:14px;line-height:1.6"><b style="font-size:16px">🧪 練習用の画面（作り物のお客さん）</b>　本物の注文・お客さん・印刷・SMS には何も届きません。押した結果はこのブラウザの中だけで、ページを開き直すと最初に戻ります。確認の小窓は自動で「OK」になり、知らせは右下に出ます。<br><a href="renshu_yucho.csv" download>📄 練習用のゆうちょ CSV を取る</a>（②の「📥 ゆうちょの CSV を入れる」で入れてみてください）　<button onclick="location.reload()" style="margin-left:8px">↺ 最初に戻す</button><span id="pyst" style="margin-left:12px;color:#8a5a00;font-weight:bold">⏳ 準備しています（初回は10〜20秒）…</span></div><main>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <h1>🎍 年末直売会の注文</h1>
     <button class="btn b" onclick="load()">🔄 表から取り直す</button>
