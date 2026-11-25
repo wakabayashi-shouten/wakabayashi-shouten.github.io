@@ -170,7 +170,8 @@ function yen(n){return n.toLocaleString()+'円（税込）'}
 function el(i){return document.getElementById(i)}
 function soF(n){n=+n||0;return Math.max(1,Math.ceil(n/6))*C.soryoReito}
 (function(){var d=C.hamDays||[],b=el('kibouBox');if(!d.length||!b)return;b.querySelector('label .small').textContent='（'+d[0]+'〜'+d[d.length-1]+' から選べます）';b.querySelector('p.small').textContent='※ 選べるのは '+d[0]+'〜'+d[d.length-1]+' です。指定なしは、最短でお届けします。'})();
-(function(){var b=el('chirashi');if(!b||C.closed)return;var y=function(n){return Number(n).toLocaleString()+'円'},pr={};C.items.forEach(function(it){pr[it.key]=it.price});
+(function(){var b=el('chirashi');if(!b||C.closed||1)return;   // 上のチラシの枠は出さない（11/25 賢さん「要らない」）
+var y=function(n){return Number(n).toLocaleString()+'円'},pr={};C.items.forEach(function(it){pr[it.key]=it.price});
 var h='<div class="chi"><h3>🎍 年末直売会 2026</h3><div class="ct">🤝 工場直売会（12/30 受け取り）</div>';
 C.items.forEach(function(it){if(it.how==='kojo')h+='<div class="sl"><span>'+it.name+'</span><b>'+y(it.price)+'／'+it.unit+'</b></div>'});
 h+='<div class="ct">🎁 ギフトボックス（クール便）</div>';
