@@ -16,9 +16,9 @@ var CFG = {
   HAM_OPEN: true,   // ★ハムの発送（桑原ハムさんから直送）を受けるか。false にすると「準備中」で押せない
   // 郵送（当社のクール便）は次のセットだけ（1件＝1箱＝1か所）。q＝品の key と数（11/21 賢さん：ハラミはやめ、工場のシークレットへ）
   SETS: [
-    { key: 's2', name: '牛牛セット', note: '和牛サーロイン薄切り 2パック（冷凍・1パック約330g）', q: { sir: 2 } },
-    { key: 'sb', name: '牛豚セット', note: '和牛サーロイン薄切り 1パック＋林SPF豚 ロース薄切り 1パック（冷凍）', q: { sir: 1, buta: 1 } },
-    { key: 'b2', name: '豚豚セット', note: '林SPF豚 ロース薄切り 2パック（冷凍）', q: { buta: 2 } }
+    { key: 's2', name: '牛牛セット', note: '和牛サーロイン薄切り 約330g×2パック', q: { sir: 2 } },
+    { key: 'sb', name: '牛豚セット', note: '和牛サーロイン薄切り 約330g＋林SPF豚 ロース薄切り 約550g', q: { sir: 1, buta: 1 } },
+    { key: 'b2', name: '豚豚セット', note: '林SPF豚 ロース薄切り 約550g×2パック', q: { buta: 2 } }
   ],
   // 振込先（郵送の方だけ・先に振り込み）。ゆうちょ普通（請求書と同じ口座）
   FURIKOMI_KIGEN: '12/23（水）',   // 振り込みの期限（確定ページ・完了画面・SMS に出す）
@@ -26,7 +26,7 @@ var CFG = {
   // how＝どの受け取り方で出す品か（kojo＝工場・当日現金／hamb＝桑原ハムさんから直送・送料は1件1回）。col＝表の列名
   ITEMS: [
     { key: 'sir', how: 'kojo', col: 'サーロイン', name: '冷凍 和牛サーロイン薄切り', unit: 'パック', price: 5000, note: '1パック 約330g' },
-    { key: 'buta', how: 'kojo', col: '豚', name: '冷凍 林SPF豚 ロース薄切り', unit: 'パック', price: 2500, note: '1パック（冷凍）・<a href="https://www.hayashi-spf.co.jp/h-spf.html" target="_blank">林SPF のサイト</a>' },
+    { key: 'buta', how: 'kojo', col: '豚', name: '冷凍 林SPF豚 ロース薄切り', unit: 'パック', price: 2500, note: '1パック 約550g・<a href="https://www.hayashi-spf.co.jp/h-spf.html" target="_blank">林SPF のサイト</a>' },
     { key: 'slice', how: 'kojo', col: 'スライス', hin: 'スライス5P', name: '桑原ハム ロースハム 100gスライスパック ×5', unit: 'セット', price: 2500, was: 2750, tag: '10%オフ・工場直売会のみの限定価格', note: '100g×5パック（冷蔵）・5パック単位のみ' },
     { key: 'genboku', how: 'hamb', col: '発送_原木1kg', name: '桑原ハム 生原木ロースハム 約1kg', unit: '本', price: 5000, kg: 1, note: '約1kg・冷蔵でお届け・<a href=\"https://kuwahara-ham.co.jp/\" target=\"_blank\">桑原ハムのサイト</a>' },
     { key: 'slice10', how: 'hamb', col: '発送_スライス10P', name: '桑原ハム ロースハム スライス 100g×10パック', unit: '箱', price: 5500, kg: 1, note: '100g×10パックで1箱（約1kg）・冷蔵でお届け' }
@@ -46,16 +46,17 @@ function hamDaysOk_() { var y = +CFG.SHIMEKIRI.slice(0, 4), n = new Date(Date.no
 function faxHtml_() {
   var kt = PropertiesService.getScriptProperties().getProperty('KEITAI') || '';
   var nt = function (x) { return String(x.note || '').replace(/<a[^>]*>[\s\S]*?<\/a>/g, '').replace(/<[^>]+>/g, '').replace(/[・\s]+$/, ''); };   // 「○○のサイト」のリンクは紙に出さない
-  var row_ = function (x) { return '<tr><td>' + x.name + ' <span class="s">' + nt(x) + '</span></td><td class="r">' + x.price.toLocaleString() + '円</td><td class="r">' + x.unit + '</td></tr>'; };
+  var RZ = '<span class="rz">冷凍</span>', nm = function (x) { return /^冷凍\s*/.test(x.name) ? RZ + x.name.replace(/^冷凍\s*/, '') : x.name; };   // 冷凍は青い印で（注文ページの札と同じ）
+  var row_ = function (x) { return '<tr><td>' + nm(x) + ' <span class="s">' + nt(x) + '</span></td><td class="r">' + x.price.toLocaleString() + '円</td><td class="r">' + x.unit + '</td></tr>'; };
   var sec_ = function (t) { return '<tr><td colspan="3" class="sec">' + t + '</td></tr>'; };
   var pr = {}; CFG.ITEMS.forEach(function (x) { pr[x.key] = x.price; });
-  var st = CFG.SETS.map(function (x) { var y = 0; Object.keys(x.q).forEach(function (k) { y += x.q[k] * pr[k]; }); return '<tr><td>' + x.name + ' <span class="s">' + x.note + '</span></td><td class="r">' + y.toLocaleString() + '円</td><td class="r">箱</td></tr>'; }).join('');
+  var st = CFG.SETS.map(function (x) { var y = 0; Object.keys(x.q).forEach(function (k) { y += x.q[k] * pr[k]; }); return '<tr><td>' + RZ + x.name + ' <span class="s">' + x.note + '</span></td><td class="r">' + y.toLocaleString() + '円</td><td class="r">箱</td></tr>'; }).join('');
   var hd = hamDaysL_(), tp = (CFG.TENPO || []).concat(['なし']).join('　・　');
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>年末直売会 ご注文書</title><style>'
     + '@page{size:A4;margin:10mm 12mm 20mm}body{font-family:"Yu Gothic","Meiryo",sans-serif;font-size:12px;line-height:1.3;color:#000;margin:0}'
     + 'h1{font-size:19px;margin:0}h2{font-size:13px;margin:5px 0 2px;border-bottom:2px solid #000}'
     + 'table{border-collapse:collapse;width:100%}td,th{border:1px solid #000;padding:4px 6px;vertical-align:middle}th{width:21%;text-align:left;background:#eee;font-size:11.5px}th.w1{width:14%}'
-    + '.r{text-align:right}.s{font-size:10.5px}.sec{background:#ddd;font-weight:bold}.ok{display:inline-block;border:1px solid #000;border-radius:12px;padding:0 8px;margin:1px 4px 1px 0}'
+    + '.r{text-align:right}.s{font-size:10.5px}.rz{background:#1565c0;color:#fff;border-radius:4px;padding:0 4px;font-size:11px;margin-right:3px;font-weight:bold;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sec{background:#ddd;font-weight:bold}.ok{display:inline-block;border:1px solid #000;border-radius:12px;padding:0 8px;margin:1px 4px 1px 0}'
     + '.np{margin:10px 0;text-align:center}.np button{font-size:18px;padding:8px 20px}@media print{.np{display:none}}@media screen{body{max-width:720px;margin:0 auto;padding:8px}}</style></head><body>'
     + '<div class="np"><button onclick="window.print()">🖨 印刷する</button></div>'
     + '<h1>年末直売会 ご注文書</h1><div><b>締め切り ' + shime_() + '</b>　FAX 03-3637-8501 か、工場のポストへ（江東区大島3-16-17）</div>'
