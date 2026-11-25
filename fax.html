@@ -7,7 +7,8 @@ var CFG = {
   HAM_SORYO: 1500,   // ハムの発送の送料（税込）。何個でも同じ箱で1件に1回（11/12 賢さん：桑原さんが同封してくれる）
   MAX_QTY: 20,   // 1つの品の数の上限（画面とサーバーで同じ）
   HAM_MAX_KG: 10,   // ハムの発送は1箱 10kg まで（kg＝1つの重さ）
-  HAM_KIBOU_TO: '12/31',   // ★ハムの到着希望日はいつまで選べるか（いつから＝HASSO1 の日。HAM_DAYS が空の時だけ使う・11/25）
+  HAM_KIBOU_FROM: '12/20', HAM_KIBOU_TO: '1/10', HAM_KIBOU_AFTER: 3,   // ★ハムの到着希望日：12/20〜1/10・注文した日の3日後から選べる（11/25 賢さん）。下の古い説明は HAM_KIBOU_TO の分
+  _HAM_TO_OLD: '12/31',   // ★ハムの到着希望日はいつまで選べるか（いつから＝HASSO1 の日。HAM_DAYS が空の時だけ使う・11/25）
   HAM_DAYS: [],   // ★ハムの届く日（例 ['12/26', '12/27', '12/28']）。空なら自由に書く欄・入れると選ぶ形（桑原ハムさんに聞いてから入れる）
   MAIL_ON: true,   // ★確定の URL をメールで自動送信するか（メールアドレスを書いた人だけ）。false にすると全部 SMS
   MAIL_NOKOSU: 5,   // 今日あと何通 送れるか（無料の Gmail は1日 100 通）がこの数以下なら、メールは送らず SMS で
@@ -40,7 +41,8 @@ function closedHtml_() {
     + '<b>受け付けは締め切りました。</b><br><span style="font-size:16px">締め切り ' + shime_() + '</span><br>お問い合わせ TEL <a href="tel:09098437776">090-9843-7776</a></div></body></html>';
 }
 function hamDaysL_() { return CFG.HAM_DAYS.length ? CFG.HAM_DAYS : hamDaysAuto_(); }
-function hamDaysAuto_() { var y = +CFG.SHIMEKIRI.slice(0, 4), a = String(CFG.HASSO1).match(/(\d+)\/(\d+)/), b = String(CFG.HAM_KIBOU_TO || '12/31').match(/(\d+)\/(\d+)/), out = []; if (!a || !b) return out; for (var t = Date.UTC(y, a[1] - 1, +a[2]); t <= Date.UTC(y, b[1] - 1, +b[2]); t += 864e5) { var d = new Date(t); out.push((d.getUTCMonth() + 1) + '/' + d.getUTCDate() + '（' + '日月火水木金土'.charAt(d.getUTCDay()) + '）'); } return out; }
+function hamDaysAuto_() { var y = +CFG.SHIMEKIRI.slice(0, 4), a = String(CFG.HAM_KIBOU_FROM || CFG.HASSO1).match(/(\d+)\/(\d+)/), b = String(CFG.HAM_KIBOU_TO || '12/31').match(/(\d+)\/(\d+)/), out = []; if (!a || !b) return out; var t0 = Date.UTC(y, a[1] - 1, +a[2]), t1 = Date.UTC(+b[1] < +a[1] ? y + 1 : y, b[1] - 1, +b[2]); for (var t = t0; t <= t1; t += 864e5) { var d = new Date(t); out.push((d.getUTCMonth() + 1) + '/' + d.getUTCDate() + '（' + '日月火水木金土'.charAt(d.getUTCDay()) + '）'); } return out; }
+function hamDaysOk_() { var y = +CFG.SHIMEKIRI.slice(0, 4), n = new Date(Date.now() + 9 * 3600000), lim = Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()) + (CFG.HAM_KIBOU_AFTER || 0) * 864e5, a = String(CFG.HAM_KIBOU_FROM || CFG.HASSO1).match(/(\d+)\//); return hamDaysL_().filter(function (s) { var m = s.match(/(\d+)\/(\d+)/); return Date.UTC(+m[1] < +a[1] ? y + 1 : y, m[1] - 1, +m[2]) >= lim; }); }
 function faxHtml_() {
   var kt = PropertiesService.getScriptProperties().getProperty('KEITAI') || '';
   var nt = function (x) { return String(x.note || '').replace(/<a[^>]*>[\s\S]*?<\/a>/g, '').replace(/<[^>]+>/g, '').replace(/[・\s]+$/, ''); };   // 「○○のサイト」のリンクは紙に出さない
