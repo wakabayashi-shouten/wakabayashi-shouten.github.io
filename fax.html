@@ -51,7 +51,7 @@ function faxHtml_() {
   var sec_ = function (t) { return '<tr><td colspan="3" class="sec">' + t + '</td></tr>'; };
   var pr = {}; CFG.ITEMS.forEach(function (x) { pr[x.key] = x.price; });
   var st = CFG.SETS.map(function (x) { var y = 0; Object.keys(x.q).forEach(function (k) { y += x.q[k] * pr[k]; }); return '<tr><td>' + RZ + x.name + ' <span class="s">' + x.note + '</span></td><td class="r">' + y.toLocaleString() + '円</td><td class="r">箱</td></tr>'; }).join('');
-  var hd = hamDaysL_(), tp = (CFG.TENPO || []).concat(['なし']).join('　・　');
+  var hd = hamDaysL_(), tp = ['一般'].concat(CFG.TENPO || []).concat(['その他（　　　　　　　　）']).map(function (x) { return '<span style="white-space:nowrap">' + x + '</span>' }).join('　・　');   // 名前の途中で改行しない（11/25 賢さん）
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>年末直売会 ご注文書</title><style>'
     + '@page{size:A4;margin:10mm 12mm 20mm}body{font-family:"Yu Gothic","Meiryo",sans-serif;font-size:12px;line-height:1.3;color:#000;margin:0}'
     + 'h1{font-size:19px;margin:0}h2{font-size:13px;margin:5px 0 2px;border-bottom:2px solid #000}'
@@ -61,7 +61,7 @@ function faxHtml_() {
     + '<div class="np"><button onclick="window.print()">🖨 印刷する</button></div>'
     + '<h1>年末直売会 ご注文書</h1><div><b>締め切り ' + shime_() + '</b>　FAX 03-3637-8501 か、工場のポストへ（江東区大島3-16-17）</div>'
     + '<h2>ご注文の方</h2><table><tr><th>お名前</th><td style="height:22px"></td><th class="w1">フリガナ</th><td style="width:30%"></td></tr><tr><th>電話 <span class="s">（携帯。無ければ家）</span></th><td colspan="3" style="height:22px"></td></tr>'
-    + '<tr><th>ご住所 <span class="s">（発送がある方）</span></th><td colspan="3">〒　　　－</td></tr><tr><th>店舗名など</th><td colspan="3">' + tp + '　・　その他（　　　　　　　　）<span class="s">（○で囲む）</span></td></tr></table>'
+    + '<tr><th>ご住所 <span class="s">（発送がある方）</span></th><td colspan="3">〒　　　－</td></tr><tr><th>所属</th><td colspan="3">' + tp + '<span class="s">（○で囲む）</span></td></tr></table>'
     + '<h2>受け取り方（当てはまる物を ○ で囲む・いくつでも）</h2>'
     + '<span class="ok"><b>12/30 工場直売会</b>（11時〜14時・当日現金）</span><span class="ok"><b>ギフトボックス発送</b>（' + CFG.HASSO1 + '）</span>' + (CFG.HAM_OPEN ? '<span class="ok"><b>ロースハム発送</b>（桑原ハムさんから）</span>' : '')
     + '<h2>品と数</h2><table><tr><th style="width:auto">品</th><th class="w1">値段（税込）</th><th class="w1">数</th></tr>'
