@@ -7,6 +7,7 @@ var CFG = {
   HAM_SORYO: 1500,   // ハムの発送の送料（税込）。何個でも同じ箱で1件に1回（11/12 賢さん：桑原さんが同封してくれる）
   MAX_QTY: 20,   // 1つの品の数の上限（画面とサーバーで同じ）
   HAM_MAX_KG: 10,   // ハムの発送は1箱 10kg まで（kg＝1つの重さ）
+  HAM_KIBOU_TO: '12/31',   // ★ハムの到着希望日はいつまで選べるか（いつから＝HASSO1 の日。HAM_DAYS が空の時だけ使う・11/25）
   HAM_DAYS: [],   // ★ハムの届く日（例 ['12/26', '12/27', '12/28']）。空なら自由に書く欄・入れると選ぶ形（桑原ハムさんに聞いてから入れる）
   MAIL_ON: true,   // ★確定の URL をメールで自動送信するか（メールアドレスを書いた人だけ）。false にすると全部 SMS
   MAIL_NOKOSU: 5,   // 今日あと何通 送れるか（無料の Gmail は1日 100 通）がこの数以下なら、メールは送らず SMS で
@@ -38,41 +39,41 @@ function closedHtml_() {
     + '.c{background:#fff;border:3px solid #c00;border-radius:10px;padding:20px;max-width:520px;margin:0 auto}</style></head><body><div class="c">'
     + '<b>受け付けは締め切りました。</b><br><span style="font-size:16px">締め切り ' + shime_() + '</span><br>お問い合わせ TEL <a href="tel:09098437776">090-9843-7776</a></div></body></html>';
 }
+function hamDaysL_() { return CFG.HAM_DAYS.length ? CFG.HAM_DAYS : hamDaysAuto_(); }
+function hamDaysAuto_() { var y = +CFG.SHIMEKIRI.slice(0, 4), a = String(CFG.HASSO1).match(/(\d+)\/(\d+)/), b = String(CFG.HAM_KIBOU_TO || '12/31').match(/(\d+)\/(\d+)/), out = []; if (!a || !b) return out; for (var t = Date.UTC(y, a[1] - 1, +a[2]); t <= Date.UTC(y, b[1] - 1, +b[2]); t += 864e5) { var d = new Date(t); out.push((d.getUTCMonth() + 1) + '/' + d.getUTCDate() + '（' + '日月火水木金土'.charAt(d.getUTCDay()) + '）'); } return out; }
 function faxHtml_() {
   var kt = PropertiesService.getScriptProperties().getProperty('KEITAI') || '';
-  var row_ = function (x) {
-    return '<tr><td>' + x.name + '<br><span class="s">' + x.note.replace(/<[^>]+>/g, '') + '</span></td><td class="r">' + x.price.toLocaleString() + '円</td><td class="r">　　　　' + x.unit + '</td></tr>';
-  };
-  var it = itemsFor_('kojo').map(row_).join('');
-  var hm = itemsFor_('hamb').map(row_).join('');
+  var nt = function (x) { return String(x.note || '').replace(/<a[^>]*>[\s\S]*?<\/a>/g, '').replace(/<[^>]+>/g, '').replace(/[・\s]+$/, ''); };   // 「○○のサイト」のリンクは紙に出さない
+  var row_ = function (x) { return '<tr><td>' + x.name + ' <span class="s">' + nt(x) + '</span></td><td class="r">' + x.price.toLocaleString() + '円</td><td class="r">' + x.unit + '</td></tr>'; };
+  var sec_ = function (t) { return '<tr><td colspan="3" class="sec">' + t + '</td></tr>'; };
   var pr = {}; CFG.ITEMS.forEach(function (x) { pr[x.key] = x.price; });
-  var st = CFG.SETS.map(function (x) {
-    var y = CFG.SORYO_REITO; Object.keys(x.q).forEach(function (k) { y += x.q[k] * pr[k]; });
-    return '□ ' + x.name + '（' + x.note + '）　送料込み <b>' + y.toLocaleString() + '円</b>';
-  }).join('<br>');
+  var st = CFG.SETS.map(function (x) { var y = 0; Object.keys(x.q).forEach(function (k) { y += x.q[k] * pr[k]; }); return '<tr><td>' + x.name + ' <span class="s">' + x.note + '</span></td><td class="r">' + y.toLocaleString() + '円</td><td class="r">箱</td></tr>'; }).join('');
+  var hd = hamDaysL_(), tp = (CFG.TENPO || []).concat(['なし']).join('　・　');
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>年末直売会 ご注文書</title><style>'
-    + '@page{size:A4;margin:12mm 12mm 20mm}body{font-family:"Yu Gothic","Meiryo",sans-serif;font-size:13px;color:#000;margin:0}'
-    + 'h1{font-size:22px;margin:0 0 2px}h2{font-size:15px;margin:10px 0 4px;border-bottom:2px solid #000}'
-    + 'table{border-collapse:collapse;width:100%}td,th{border:1px solid #000;padding:6px 8px;vertical-align:middle}th{width:24%;text-align:left;background:#eee}'
-    + '.r{text-align:right}.s{font-size:11px}.big{font-size:16px;font-weight:bold}.box{border:2px solid #000;padding:6px 8px;margin:6px 0}'
-    + '.np{margin:10px 0;text-align:center}.np button{font-size:18px;padding:8px 20px}@media print{.np{display:none}}</style></head><body>'
+    + '@page{size:A4;margin:10mm 12mm 20mm}body{font-family:"Yu Gothic","Meiryo",sans-serif;font-size:12px;line-height:1.3;color:#000;margin:0}'
+    + 'h1{font-size:19px;margin:0}h2{font-size:13px;margin:5px 0 2px;border-bottom:2px solid #000}'
+    + 'table{border-collapse:collapse;width:100%}td,th{border:1px solid #000;padding:4px 6px;vertical-align:middle}th{width:21%;text-align:left;background:#eee;font-size:11.5px}th.w1{width:14%}'
+    + '.r{text-align:right}.s{font-size:10.5px}.sec{background:#ddd;font-weight:bold}.ok{display:inline-block;border:1px solid #000;border-radius:12px;padding:0 8px;margin:1px 4px 1px 0}'
+    + '.np{margin:10px 0;text-align:center}.np button{font-size:18px;padding:8px 20px}@media print{.np{display:none}}@media screen{body{max-width:720px;margin:0 auto;padding:8px}}</style></head><body>'
     + '<div class="np"><button onclick="window.print()">🖨 印刷する</button></div>'
     + '<h1>年末直売会 ご注文書</h1><div><b>締め切り ' + shime_() + '</b>　FAX 03-3637-8501 か、工場のポストへ（江東区大島3-16-17）</div>'
-    + '<h2>ご注文の方</h2><table><tr><th>氏名</th><td style="height:30px"></td></tr><tr><th>フリガナ</th><td style="height:24px"></td></tr><tr><th>電話</th><td style="height:30px"></td></tr></table>'
-    + '<h2>受け取り方（どれか1つに ○）</h2><div class="box big">□ 12/30 工場直売会　12月30日（水）11時〜14時　<span class="s">当日現金</span></div>'
-    + '<div class="box"><b>□ ' + CFG.HASSO1 + ' クール便で発送（ギフトボックス：牛・豚のセット）</b>　<span class="s">ゆうちょへ振り込み</span></div>'
-    + (CFG.HAM_OPEN ? '<div class="box"><b>□ ハムの発送（桑原ハムさんから直送）</b>　<span class="s">ゆうちょへ振り込み・お届けの希望日（　　　　）</span></div>' : '')
-    + '<h2>工場で受け取る方：品と数</h2><table><tr><th style="width:auto">品</th><th style="width:18%">値段</th><th style="width:18%">数</th></tr>' + it
-    + '<tr><td colspan="2" class="r"><b>合計金額</b></td><td class="r">　　　　円</td></tr></table>'
-    + (CFG.HAM_OPEN ? '<h2>ハムの発送の方：品と数（送料は何個でも1回 ' + CFG.HAM_SORYO.toLocaleString() + '円）</h2><div class="s">※ 10kg程度の重さまでは、1箱で発送できます。</div><table><tr><th style="width:auto">品</th><th style="width:18%">値段</th><th style="width:18%">数</th></tr>' + hm + '<tr><td>送料（何個でも1回）</td><td class="r">' + CFG.HAM_SORYO.toLocaleString() + '円</td><td></td></tr><tr><td colspan="2" class="r"><b>合計金額</b></td><td class="r">　　　　円</td></tr></table>' : '')
-    + '<h2>郵送の方：セット（1枚で1か所）</h2><div class="s">※ 送料は8箱まで ' + CFG.SORYO_REITO.toLocaleString() + '円・8箱をこえると8箱ごとに ' + CFG.SORYO_REITO.toLocaleString() + '円追加（下の値段は1箱の時の送料込み）</div><div class="box">' + st + '</div>'
-    + '<table><tr><th>お届け先 〒</th><td>〒　　　－</td></tr><tr><th>ご住所</th><td style="height:34px"></td></tr><tr><th>氏名</th><td style="height:26px"></td></tr><tr><th>電話</th><td style="height:26px"></td></tr>'
-    + '<tr><th>お届けの希望日<br><span class="s">（クール便）</span></th><td>□ 指定なし　' + CFG.KIBOU_C.map(function (d) { return '□ ' + d; }).join('　') + '</td></tr>'
-    + '<tr><th>お届けの時間</th><td>□ 指定なし　□ 午前中　□ 14〜16時　□ 16〜18時　□ 18〜20時　□ 19〜21時</td></tr>'
-    + '<tr><th>ご依頼主（差出人）</th><td>□ お届け先と同じ<br>違う時：〒　　　－　　住所　　　　　　　　　　　氏名　　　　　　電話</td></tr></table>'
-    + '<div class="s" style="margin-top:6px">※ 郵送は、先に ' + CFG.FURIKOMI.split('\n')[0] + '（名義：株式会社若林商店）へお振り込みください。<b>振込手数料は、お客様のご負担でお願いします。</b>ご入金を確かめてから発送します。<br>'
+    + '<h2>ご注文の方</h2><table><tr><th>お名前</th><td style="height:22px"></td><th class="w1">フリガナ</th><td style="width:30%"></td></tr><tr><th>電話 <span class="s">（携帯。無ければ家）</span></th><td colspan="3" style="height:22px"></td></tr>'
+    + '<tr><th>ご住所 <span class="s">（発送がある方）</span></th><td colspan="3">〒　　　－</td></tr><tr><th>店舗名・ご紹介</th><td colspan="3">' + tp + ' <span class="s">（○で囲む）</span></td></tr></table>'
+    + '<h2>受け取り方（当てはまる物を ○ で囲む・いくつでも）</h2>'
+    + '<span class="ok"><b>12/30 工場直売会</b>（11時〜14時・当日現金）</span><span class="ok"><b>ギフトボックス発送</b>（' + CFG.HASSO1 + '）</span>' + (CFG.HAM_OPEN ? '<span class="ok"><b>ロースハム発送</b>（桑原ハムさんから）</span>' : '')
+    + '<h2>品と数</h2><table><tr><th style="width:auto">品</th><th class="w1">値段（税込）</th><th class="w1">数</th></tr>'
+    + sec_('① 12/30 工場直売会で受け取る品（当日現金）') + itemsFor_('kojo').map(row_).join('')
+    + sec_('② ギフトボックス（' + CFG.HASSO1 + ' クール便で発送）') + st + '<tr><td>送料 <span class="s">（お届け先ごと・8箱まで。8箱をこえると8箱ごとに追加）</span></td><td class="r">' + CFG.SORYO_REITO.toLocaleString() + '円</td><td></td></tr>'
+    + (CFG.HAM_OPEN ? sec_('③ ロースハム発送（桑原ハムさんから直送）') + itemsFor_('hamb').map(row_).join('') + '<tr><td>送料 <span class="s">（お届け先ごと・何個でも1回）</span></td><td class="r">' + CFG.HAM_SORYO.toLocaleString() + '円</td><td></td></tr>' : '')
+    + '<tr><td colspan="2" class="r"><b>合計金額</b></td><td class="r">円</td></tr></table>'
+    + '<h2>発送の方：お届け先</h2><table><tr><th>お届け先</th><td>〒　　　－　　　　ご住所<br>&nbsp;</td></tr><tr><th>受け取る方</th><td>お名前　　　　　　　　　　　　電話</td></tr>'
+    + '<tr><th>ギフトの希望 <span class="s">（○で囲む）</span></th><td>日：指定なし　' + CFG.KIBOU_C.join('　') + '<br>時間：指定なし　午前中　14〜16時　16〜18時　18〜20時　19〜21時</td></tr>'
+    + (CFG.HAM_OPEN ? '<tr><th>ハムの到着希望日</th><td>指定なし ／ 　　月　　日 <span class="s">（' + (hd.length ? hd[0] + '〜' + hd[hd.length - 1] + ' から選べます' : '日にちでご記入ください') + '）</span></td></tr>' : '')
+    + '<tr><th>ご依頼主（差出人）</th><td>お届け先と同じ ／ ご注文の方と同じ ／ 違う時：〒　　　－　　　住所<br>お名前　　　　　　　　　　　電話</td></tr></table>'
+    + '<h2>備考（のし・ご要望など）</h2><table><tr><td style="height:30px;vertical-align:top"><span class="s">振込の名義がご注文の方と違う時は、その名義も</span></td></tr></table>'
+    + '<div class="s" style="margin-top:4px">※ お振り込み先：' + CFG.FURIKOMI.split('\n')[0] + '（名義：株式会社若林商店）。振込手数料は、お客様のご負担でお願いします。ご入金を確かめてから発送します。<br>'
     + '※ 2か所以上に送る時は、この紙をコピーして1か所に1枚書いてください。一部の離島へはお送りできません。表示はすべて税込みです。</div>'
-    + '<div style="margin-top:8px;border-top:1px solid #000;padding-top:4px">株式会社若林商店　江東区大島3-16-17（工場）　TEL 03-3681-0217　FAX 03-3637-8501' + (kt ? '　担当 ' + kt : '') + '</div>'
+    + '<div style="margin-top:5px;border-top:1px solid #000;padding-top:3px">株式会社若林商店　江東区大島3-16-17（工場）　TEL 03-3681-0217　FAX 03-3637-8501' + (kt ? '　担当 ' + kt : '') + '</div>'
     + '</body></html>';
 }
 var __h=isClosed_()?closedHtml_():faxHtml_();document.open();document.write(__h.replace("<head>",'<head><meta name="viewport" content="width=device-width,initial-scale=1">'));document.close();</script></body></html>
