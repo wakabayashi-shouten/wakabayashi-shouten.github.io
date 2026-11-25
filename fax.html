@@ -3,7 +3,7 @@ var CFG = {
   SHIMEKIRI: '2026-12-23T23:59:59+09:00',   // 締め切り 12/23（水）の終わりまで
   HASSO1: '12/26（土）',   // ★早い方の発送日（ここ1か所で変える。画面・表の両方に出る）
   KIBOU_C: ['12/28（月）', '12/29（火）', '12/30（水）', '12/31（木）'],   // クール便のお届け希望日（選ぶ形）
-  SORYO_REITO: 2000,   // 当社のクール便の送料 1か所あたり・8箱まで（税込・箱代込み）。8箱をこえると8箱ごとに同じ額を足す（11/25 賢さん）
+  SORYO_REITO: 2000,   // 当社のクール便の送料 1か所あたり・6箱まで（税込・箱代込み）。6箱をこえると6箱ごとに同じ額を足す（11/25 賢さん）
   HAM_SORYO: 1500,   // ハムの発送の送料（税込）。何個でも同じ箱で1件に1回（11/12 賢さん：桑原さんが同封してくれる）
   MAX_QTY: 20,   // 1つの品の数の上限（画面とサーバーで同じ）
   HAM_MAX_KG: 10,   // ハムの発送は1箱 10kg まで（kg＝1つの重さ）
@@ -65,7 +65,7 @@ function faxHtml_() {
     + '<span class="ok"><b>12/30 工場直売会</b>（11時〜14時・当日現金）</span><span class="ok"><b>ギフトボックス発送</b>（' + CFG.HASSO1 + '）</span>' + (CFG.HAM_OPEN ? '<span class="ok"><b>ロースハム発送</b>（桑原ハムさんから）</span>' : '')
     + '<h2>品と数</h2><table><tr><th style="width:auto">品</th><th class="w1">値段（税込）</th><th class="w1">数</th></tr>'
     + sec_('① 12/30 工場直売会で受け取る品（当日現金）') + itemsFor_('kojo').map(row_).join('')
-    + sec_('② ギフトボックス（' + CFG.HASSO1 + ' クール便で発送）') + st + '<tr><td>送料 <span class="s">（お届け先ごと・8箱まで。8箱をこえると8箱ごとに追加）</span></td><td class="r">' + CFG.SORYO_REITO.toLocaleString() + '円</td><td></td></tr>'
+    + sec_('② ギフトボックス（' + CFG.HASSO1 + ' クール便で発送）') + st + '<tr><td>送料 <span class="s">（お届け先ごと・6箱まで。6箱をこえると6箱ごとに追加）</span></td><td class="r">' + CFG.SORYO_REITO.toLocaleString() + '円</td><td></td></tr>'
     + (CFG.HAM_OPEN ? sec_('③ ロースハム発送（桑原ハムさんから直送）') + itemsFor_('hamb').map(row_).join('') + '<tr><td>送料 <span class="s">（お届け先ごと・何個でも1回）</span></td><td class="r">' + CFG.HAM_SORYO.toLocaleString() + '円</td><td></td></tr>' : '')
     + '<tr><td colspan="2" class="r"><b>合計金額</b></td><td class="r">円</td></tr></table>'
     + '<h2>発送の方：お届け先</h2><table><tr><th>お届け先</th><td>〒　　　－　　　　ご住所<br>&nbsp;</td></tr><tr><th>受け取る方</th><td>お名前　　　　　　　　　　　　電話</td></tr>'
