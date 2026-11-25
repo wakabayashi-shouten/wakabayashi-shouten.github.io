@@ -47,7 +47,7 @@ function faxHtml_() {
   var kt = PropertiesService.getScriptProperties().getProperty('KEITAI') || '';
   var nt = function (x) { return String(x.note || '').replace(/<a[^>]*>[\s\S]*?<\/a>/g, '').replace(/<[^>]+>/g, '').replace(/[・\s]+$/, ''); };   // 「○○のサイト」のリンクは紙に出さない
   var RZ = '<span class="rz">冷凍</span>', nm = function (x) { return /^冷凍\s*/.test(x.name) ? RZ + x.name.replace(/^冷凍\s*/, '') : x.name; };   // 冷凍は青い印で（注文ページの札と同じ）
-  var FN = { sir: '和牛サーロイン薄切り（約330g）', buta: '豚ロース薄切り（約550g）', slice: 'ロースハム 5パック（100g×5）', genboku: 'ロースハム 原木（約1kg）', slice10: 'ロースハム 10パック（100g×10）', s2: '牛牛セット（サーロイン×2）', sb: '牛豚セット（サーロイン＋豚ロース）', b2: '豚豚セット（豚ロース×2）' };   // FAX の紙は短い名前で（11/25 賢さん）
+  var FN = { sir: '和牛サーロイン薄切り（約330g）', buta: '林SPF豚ロース薄切り（約550g）', slice: 'ロースハム 5パック（100g×5）', genboku: 'ロースハム 原木（約1kg）', slice10: 'ロースハム 10パック（100g×10）', s2: '牛牛セット（サーロイン×2）', sb: '牛豚セット（サーロイン＋豚ロース）', b2: '豚豚セット（豚ロース×2）' };   // FAX の紙は短い名前で（11/25 賢さん）
   var row_ = function (x) { if (FN[x.key]) return '<tr><td>' + ({ sir: 1, buta: 1 }[x.key] ? RZ : '') + FN[x.key] + '</td><td class="r">' + x.price.toLocaleString() + '円</td><td class="r">' + x.unit + '</td></tr>'; return '<tr><td>' + nm(x) + ' <span class="s">' + nt(x) + '</span></td><td class="r">' + x.price.toLocaleString() + '円</td><td class="r">' + x.unit + '</td></tr>'; };
   var sec_ = function (t) { return '<tr><td colspan="3" class="sec">' + t + '</td></tr>'; };
   var pr = {}; CFG.ITEMS.forEach(function (x) { pr[x.key] = x.price; });
