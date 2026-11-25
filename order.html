@@ -98,7 +98,7 @@ input,select,textarea{width:100%;font-size:18px;padding:10px;border:1px solid #a
 <label>都道府県・市区町村</label><input id="toA1" autocomplete="off"><label>番地・建物名</label><input id="toAddr" autocomplete="off">
 <label>受け取る方のお名前</label><input id="toName" autocomplete="off">
 <label>受け取る方の電話</label><input id="toTel" type="tel" autocomplete="off">
-<div id="kibouBox" class="hide"><label>到着の希望日 <span class="small">（指定できます）</span></label><input id="kibou"><select id="kibouSel" class="hide"><option>指定なし</option></select><p class="small" style="margin:2px 0">※ 日にち（例：12/28）でご記入ください。指定がない場合は、最短でお届けします。</p></div>
+<div id="kibouBox" class="hide"><label>到着の希望日 <span class="small">（指定できます）</span></label><input id="kibou"><select id="kibouSel" class="hide"><option value="指定なし">指定なし（最短でお届け）</option></select><p class="small" style="margin:2px 0">※ 日にち（例：12/28）でご記入ください。指定がない場合は、最短でお届けします。</p></div>
 <div id="kibouCBox" class="hide"><label>お届けの希望日</label><select id="kibouC"><option>指定なし（最短）</option></select><p class="small" style="margin:2px 0">※ 北海道・九州・沖縄などの遠い地域は、12/28（月）以降のお届けになります。<br>※ 配送業者の状況によっては、ご希望の日に届かない場合もございます。</p></div>
 <label>お届けの時間帯</label><select id="jikan" ><option selected>指定なし</option><option>午前中</option><option>14〜16時</option><option>16〜18時</option><option>18〜20時</option><option>19〜21時</option></select>
 </div></div>
@@ -179,7 +179,7 @@ var PH={"slice10":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBA
 function yen(n){return n.toLocaleString()+'円（税込）'}
 function el(i){return document.getElementById(i)}
 function soF(n){n=+n||0;return Math.max(1,Math.ceil(n/6))*C.soryoReito}
-(function(){var d=C.hamDays||[],b=el('kibouBox');if(!d.length||!b)return;b.querySelector('label .small').textContent='（'+d[0]+'〜'+d[d.length-1]+' から選べます）';b.querySelector('p.small').textContent='※ 選べるのは '+d[0]+'〜'+d[d.length-1]+' です。指定なしは、最短でお届けします。'})();
+(function(){var d=C.hamDays||[],b=el('kibouBox');if(!d.length||!b)return;b.querySelector('label .small').textContent='（ご注文日の3日後からお選びください）';b.querySelector('p.small').textContent='※ 指定がない場合は、最短でお届けします。'})();
 (function(){var b=el('chirashi');if(!b||C.closed||1)return;   // 上のチラシの枠は出さない（11/25 賢さん「要らない」）
 var y=function(n){return Number(n).toLocaleString()+'円'},pr={};C.items.forEach(function(it){pr[it.key]=it.price});
 var h='<div class="chi"><h3>🎍 年末直売会 2026</h3><div class="ct">🤝 工場直売会（12/30 受け取り）</div>';

@@ -71,8 +71,8 @@ function faxHtml_() {
     + (CFG.HAM_OPEN ? sec_('③ ロースハム発送（桑原ハムさんから直送）') + itemsFor_('hamb').map(row_).join('') + '<tr><td>送料 <span class="s">（お届け先ごと）</span></td><td class="r">' + CFG.HAM_SORYO.toLocaleString() + '円</td><td></td></tr>' : '')
     + '<tr><td class="r" style="height:34px"><b>合計金額</b></td><td colspan="2" class="r" style="font-size:14px">円</td></tr></table>'
     + '<h2>発送の方：お届け先</h2><table><tr><th>お届け先</th><td>〒　　　－　　　　ご住所<br>&nbsp;</td></tr><tr><th>受け取る方</th><td>お名前　　　　　　　　　　　　電話</td></tr>'
-    + '<tr><th>ギフトの希望 <span class="s">（○で囲む）</span></th><td>日：指定なし　' + CFG.KIBOU_C.join('　') + '<br>時間：指定なし　午前中　14〜16時　16〜18時　18〜20時　19〜21時</td></tr>'
-    + (CFG.HAM_OPEN ? '<tr><th>ハムの到着希望日</th><td>指定なし ／ 　　月　　日 <span class="s">（' + (hd.length ? hd[0] + '〜' + hd[hd.length - 1] + ' から選べます' : '日にちでご記入ください') + '）</span></td></tr>' : '')
+    + '<tr><th>ギフトの希望 <span class="s">（○で囲む）</span></th><td>日：指定なし（最短 12/27 着の予定）　' + CFG.KIBOU_C.join('　') + '<br>時間：指定なし　午前中　14〜16時　16〜18時　18〜20時　19〜21時</td></tr>'
+    + (CFG.HAM_OPEN ? '<tr><th>ハムの到着希望日</th><td>指定なし（最短でお届け） ／ 　　月　　日 <span class="s">（ご注文日の3日後からお選びください）</span></td></tr>' : '')
     + '<tr><th>ご依頼主（差出人）</th><td>お届け先と同じ ／ ご注文の方と同じ ／ 違う時：〒　　　－　　　住所<br>お名前　　　　　　　　　　　電話</td></tr></table>'
     + '<h2>備考（ご要望など）</h2><table><tr><td style="height:30px;vertical-align:top"><span class="s">振込の名義がご注文の方と違う時は、その名義も。※ のしの対応はしていません。</span></td></tr></table>'
     + '<div class="s" style="margin-top:4px">※ お振り込み先：' + CFG.FURIKOMI.split('\n')[0] + '（名義：株式会社若林商店）。振込手数料は、お客様のご負担でお願いします。ご入金を確かめてから発送します。<br>'
