@@ -263,7 +263,7 @@ function cnt(e){var c={};C.items.forEach(function(it){c[it.key]=0});if(e.how==='
 function money(e){var c=cnt(e),h=0;C.items.forEach(function(it){h+=c[it.key]*it.price});var s=(e.how==='kojo'||!h)?0:(e.how==='hamb'?C.hamSoryo:soF(boxN(e.set)));return{hin:h,so:s,tot:h+s}}
 function sums(){var k=0,y=0,hasK=false;CART.forEach(function(e){var m=money(e);if(e.how==='kojo'){k+=m.tot;hasK=true}else y+=m.tot});var g=GENKIN&&hasK&&y>0;return{kojo:k,yuso:y,all:k+y,genkin:g?k+y:k,furi:g?0:y,hasK:hasK,matome:g}}
 function howName(e){return{kojo:'🤝 12/30（水）工場直売会で受け取り',bin25:'🎁 ギフトボックス（'+C.hasso1+' クール便で発送）',hamb:'🎁 ロースハム発送（桑原ハムさんから直送）'}[e.how]}
-function toHtml(e,p,detail){if(e.how==='kojo')return '';var gv=function(i){var x=document.getElementById(i);return x?x.value:''},nm=e.same?((p&&p.nameK)||gv('nameK')||(p&&p.name)||gv('name')):e.toName,tl=e.same?((p&&p.tel)||gv('tel')):e.toTel,L=function(k,v){return '<div style="display:flex;gap:6px"><span style="flex:0 0 4.5em;color:#555">'+k+'</span><span>'+esc(v||'')+'</span></div>'};
+function toHtml(e,p,detail){if(e.how==='kojo')return '';var gv=function(i){var x=document.getElementById(i);return x?x.value:''},nm=e.same?((p&&p.nameK)||gv('nameK')||(p&&p.name)||gv('name')):e.toName,tl=e.same?((p&&p.tel)||gv('tel')):e.toTel,L=function(k,v){return '<div style="display:flex;gap:6px"><span style="flex:0 0 4.5em;color:#555">'+k+'</span><span>'+(k==='ご住所'?esc(v||'').replace('　','<br>'):esc(v||''))+'</span></div>'};   // 住所は市区町村と番地で改行（11/25 賢さん）
 var s='<div class="ce-to"><b>📮 お届け先</b>'+L('お名前',nm?nm+' 様':'')+L('〒',e.toZip)+L('ご住所',e.toAddr)+(detail||true?L('電話',tl):'');
 var kb=e.how==='hamb'?e.kibou:(/^指定なし/.test(e.kibouC||'')?'':e.kibouC),jk=(e.jikan&&e.jikan!=='指定なし')?e.jikan:'';
 s+=L('希望',(kb||jk)?[kb,jk].filter(Boolean).join('・'):(e.how==='hamb'?'指定なし':'指定なし（最短でお届け）'));
@@ -345,7 +345,7 @@ var f=el(BOXID[ng[0]]||ng[0]);if(f){f.scrollIntoView({behavior:'smooth',block:'c
 el('tel').addEventListener('input',telNote);
 document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',function(){e.classList.remove('ng')})});
 function bodyHtml(p){return CART.map(function(e,i){return entryHtml(e,i,false,p)}).join('')+totHtml()}
-function personHtml(p){return '<table class="kt"><tr><th>お名前</th><td>'+esc(p.nameK||p.name)+' 様</td></tr>'+(p.nameK&&p.name?'<tr><th>フリガナ</th><td>'+esc(p.name)+'</td></tr>':'')+'<tr><th>電話</th><td>'+esc(p.tel)+'</td></tr>'+(p.chuAddr?'<tr><th>ご住所</th><td>'+(p.chuZip?'〒'+esc(p.chuZip)+'<br>':'')+esc(p.chuAddr)+'</td></tr>':'')+(p.email?'<tr><th>メール</th><td style="overflow-wrap:anywhere">'+esc(p.email)+'</td></tr>':'')+(p.memo?'<tr><th>所属</th><td>'+esc(p.memo)+'</td></tr>':'')+'</table>'}
+function personHtml(p){return '<table class="kt"><tr><th>お名前</th><td>'+esc(p.nameK||p.name)+' 様</td></tr>'+(p.nameK&&p.name?'<tr><th>フリガナ</th><td>'+esc(p.name)+'</td></tr>':'')+'<tr><th>電話</th><td>'+esc(p.tel)+'</td></tr>'+(p.chuAddr?'<tr><th>ご住所</th><td>'+(p.chuZip?'〒'+esc(p.chuZip)+'<br>':'')+esc(p.chuAddr).replace('　','<br>')+'</td></tr>':'')+(p.email?'<tr><th>メール</th><td style="overflow-wrap:anywhere">'+esc(p.email)+'</td></tr>':'')+(p.memo?'<tr><th>所属</th><td>'+esc(p.memo)+'</td></tr>':'')+'</table>'}
 /* 「注文内容を確認する」：まだ送らない。カートと欄を確かめて、確認の画面を出す */
 el('go').onclick=function(){goKakunin(false)};
 function pendAdd(h){el('err').textContent='';setH(h);calc();addNow()}
