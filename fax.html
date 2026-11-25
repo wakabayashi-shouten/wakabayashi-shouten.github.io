@@ -67,7 +67,7 @@ function faxHtml_() {
     + '<span class="ok"><b>12/30 工場直売会</b>（11時〜14時・当日現金）</span><span class="ok"><b>ギフトボックス発送</b>（' + CFG.HASSO1 + '）</span>' + (CFG.HAM_OPEN ? '<span class="ok"><b>ロースハム発送</b>（桑原ハムさんから）</span>' : '')
     + '<h2>品と数</h2><table><tr><th style="width:auto">品</th><th class="w1">値段（税込）</th><th style="width:24%">数</th></tr>'
     + sec_('① 12/30 工場直売会で受け取る品（当日現金）') + itemsFor_('kojo').map(row_).join('')
-    + sec_('② ギフトボックス（' + CFG.HASSO1 + ' クール便で発送）') + st + '<tr><td>送料 <span class="s">（お届け先ごと・6箱まで）</span></td><td class="r">' + CFG.SORYO_REITO.toLocaleString() + '円</td><td></td></tr>'
+    + sec_('② ギフトボックス（' + CFG.HASSO1 + ' クール便で発送）') + st + '<tr><td>送料 <span class="s">（お届け先1か所につき）1〜6箱 2,000円／7〜12箱 4,000円</span></td><td class="r">' + CFG.SORYO_REITO.toLocaleString() + '円</td><td></td></tr>'
     + (CFG.HAM_OPEN ? sec_('③ ロースハム発送（桑原ハムさんから直送）') + itemsFor_('hamb').map(row_).join('') + '<tr><td>送料 <span class="s">（お届け先ごと）</span></td><td class="r">' + CFG.HAM_SORYO.toLocaleString() + '円</td><td></td></tr>' : '')
     + '<tr><td class="r" style="height:34px"><b>合計金額</b></td><td colspan="2" class="r" style="font-size:14px">円</td></tr></table>'
     + '<h2>発送の方：お届け先</h2><table><tr><th>お届け先</th><td>〒　　　－　　　　ご住所<br>&nbsp;</td></tr><tr><th>受け取る方</th><td>お名前　　　　　　　　　　　　電話</td></tr>'
