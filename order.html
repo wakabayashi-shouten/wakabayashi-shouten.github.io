@@ -281,9 +281,10 @@ if(e.frName||e.frAddr)s+='<div style="margin-top:6px"><b>✉ ご依頼主（差�
 return s+'</div>'}
 function entryHtml(e,i,edit,p){var c=cnt(e),m=money(e),qb=edit&&e.how!=='bin25',s='<div class="ce" data-i="'+i+'">'+(edit&&e===EDIT_E?'<div style="color:#1565c0;font-weight:bold">✏ いま直しています（上で直して「カートに入れる」）</div>':'')+'<div class="ce-h">'+(CART.length>1?'<span class="ce-n">'+(i+1)+'</span>':'')+howName(e)+'</div>';
 if(e.how==='bin25'){if(edit){var so=sq(e.set);C.sets.forEach(function(z){s+='<div class="row"><b>📦 '+esc(z.name)+'</b><span class="cq"><button type="button" data-i="'+i+'" data-ss="'+z.key+'" data-d="-1">−</button><b>'+(so[z.key]||0)+'</b><button type="button" data-i="'+i+'" data-ss="'+z.key+'" data-d="1">＋</button> 箱</span></div>'})}else s+='<div class="row"><b>📦 '+esc(setNames(e.set))+'</b></div>'}   /* カートの中でギフトの箱の数を変える（11/26 賢さん） */
+if(e.how==='bin25')s+='<details style="margin:4px 0"><summary style="cursor:pointer;color:#555">内訳（品・送料）</summary>';
 C.items.forEach(function(it){if(c[it.key]){s+='<div class="row"><span>'+it.name+(qb?'':'　'+c[it.key]+it.unit)+'</span><span>'+(qb?'<span class="cq"><button type="button" data-i="'+i+'" data-k="'+it.key+'" data-d="-1">−</button><b>'+c[it.key]+'</b><button type="button" data-i="'+i+'" data-k="'+it.key+'" data-d="1">＋</button></span>':'')+yen(c[it.key]*it.price)+'</span></div>'}});
 if(m.so)s+='<div class="row"><span>'+(e.how==='hamb'?'送料（何個でも1回）':'送料（箱代込み・'+boxN(e.set)+'箱）')+'</span><span>'+yen(m.so)+'</span></div>';
-if(e.bikou)s+='<div class="row" style="display:block;text-align:left">📝 備考：'+esc(e.bikou)+'</div>';
+if(e.how==='bin25')s+='</details>';if(e.bikou)s+='<div class="row" style="display:block;text-align:left">📝 備考：'+esc(e.bikou)+'</div>';
 s+=toHtml(e,p,!edit);
 s+='<div class="row ce-s"><b>小計</b><span><b>'+yen(m.tot)+'</b></span></div>';
 if(edit)s+='<div class="ce-b"><button type="button" data-i="'+i+'" data-a="bk">📝 備考</button>'+(e.how!=='kojo'?'<button type="button" data-i="'+i+'" data-a="ad">📮 届け先</button>':'')+'<button type="button" data-i="'+i+'" data-a="del">🗑 消す</button></div>';
